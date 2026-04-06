@@ -1,7 +1,6 @@
 import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { readFileSync } from 'node:fs'
-import player from './player.json' with {type: 'json'}
 import { income } from './bat.js'
 
 const rl = readline.createInterface({input, output})
@@ -14,6 +13,19 @@ try {
 } catch (err) {
     console.error("Ошибка при чтении dialogue.json! Убедитесь, что файл существует.", err)
     process.exit(1)
+}
+
+const player = {
+    name: "Искатель приключений",
+    maxHP: 500,
+    currentHP: 500,
+    counter: 0,
+    hasItem: false,
+    hasWeapon: false,
+    hasArts: false,
+    hasArts2: false,
+    hasArmor: false,
+    description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
 }
 
 function showPlayerStatus() {

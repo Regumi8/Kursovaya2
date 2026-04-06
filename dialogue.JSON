@@ -243,13 +243,13 @@
     },
     "sword1": {
         "npc": "\nКузнец: С тебя 200 монет",
-        "options": [{"text": "Держи", "nextNode": "sword1-1"},{"text": "Я передумал", "nextNode": "sword2"}]
+        "options": [{"text": "Держи", "nextNode": "sword12"},{"text": "Я передумал", "nextNode": "sword2"}]
     },
     "sword2": {
         "npc": "\nКузнец: Ну как хочешь.",
         "options": [{"text": "...", "nextNode": "hunt"}]
     },
-    "sword1-1": {
+    "sword12": {
         "npc": "\nКузнец: Спасибо за покупку",
         "options": [{"text": "...", "nextNode": "hunt"}]
     },

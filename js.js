@@ -1,48 +1,19 @@
 import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { readFileSync } from 'node:fs'
-import { income } from './bat.js'
+import { player, showPlayerStatus } from './player.js'
 
 const rl = readline.createInterface({input, output})
 
-let dialogueTree
-
+let dialogueTree;
 try {
-    const data = readFileSync('./dialogue.JSON', 'utf8')
-    dialogueTree = JSON.parse(data)
-} catch (err) {
-    console.error("Ошибка при чтении dialogue.json! Убедитесь, что файл существует.", err)
-    process.exit(1)
+    dialogueTree = JSON.parse(readFileSync('./dialogue.JSON', 'utf8'));
+} catch (e) {
+    console.error("Ошибка: Файл dialogue.JSON не найден или поврежден!");
+    process.exit(1);
 }
 
-const player = {
-    name: "Искатель приключений",
-    maxHP: 500,
-    currentHP: 500,
-    counter: 0,
-    hasItem: false,
-    hasWeapon: false,
-    hasArts: false,
-    hasArts2: false,
-    hasArmor: false,
-    description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
-}
-
-function showPlayerStatus() {
-    console.log("\n===============================")
-    console.log(`ПЕРСОНАЖ: ${player.name}`)
-    console.log(`ДЕНЬГИ: ${player.counter}`)
-    console.log(`ЗДОРОВЬЕ: ${player.currentHP}/${player.maxHP}`)
-    console.log(`ПРЕДМЕТЫ: ${player.hasItem ? "Амулет Крита (шанс 10%)" : "Пусто"}`)
-    console.log(`ОРУЖИЕ: ${player.hasWeapon ? "Железный меч (урон + 10)" : "Пусто"}`)
-    console.log(`АРТЕФАКТ ДЛЯ МЕЧА: ${player.hasArts ? "Артефакт (урон + 5)" : "Пусто"}`)
-    console.log(`БРОНЯ: ${player.hasArmor ? "Броня из панциря химеры (ХП + 100)" : "Пусто"}`)
-    console.log(`АРТЕФАКТ ДЛЯ БРОНИ: ${player.hasArts2 ? "Артефакт (хп + 50)" : "Пусто"}`)
-    console.log(`ОПИСАНИЕ: ${player.description}`)
-    console.log("=================================")
-    console.log("(Нажмите Enter, чтобы вернуться в диалог)")
-}
-async function startBattle(enemyName, enemyHP, enemyDamage) {
+async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
     let currentEnemyHP = enemyHP
 
@@ -148,174 +119,292 @@ async function startBattle(enemyName, enemyHP, enemyDamage) {
         return false
     }
 }
+
+// async function startChat() {
+//     // console.log(income())
+//     let currentNodeKey = "start"
+
+//     while (currentNodeKey !== null) {
+//         const node = dialogueTree[currentNodeKey]
+//         if (!node) break
+
+//         console.log(node.npc)
+
+//         node.options.forEach((opt, index) => {
+//             console.log(`${index + 1}. ${opt.text}`)
+//         })
+
+//         console.log(`0. [Посмотреть описание игрока]`)
+
+//         const answer = await rl.question('\nВведите номер: ')
+//         if (answer === "0") {
+//             showPlayerStatus()
+//             await rl.question('')
+//             console.clear()
+//             continue
+//         }
+
+//         const choiceIndex = parseInt(answer) - 1
+
+//         if (node.options[choiceIndex]) {
+//             let next = node.options[choiceIndex].nextNode
+//             if (next === "combatGoblin") {
+//                 const win = await startBattle("Гоблин", 70, 10)
+//                 if (win) {
+//                     currentNodeKey = "afterBattle"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "item") {
+//                 player.hasItem = true
+//                 currentNodeKey = "item"
+//             }
+
+//             else if (next === "swordByStar") {
+//                 if (player.counter >= 30 && player.hasArts === false) {
+//                     player.counter -= 30
+//                     player.hasArts = true
+//                     console.log(`\n[!] Вы купили Артефакт для оружия! Оставшиеся монеты: ${player.counter}`)
+//                     currentNodeKey = "swordByStar"
+//                 } else if (next === "cityN") {
+//                     console.log("\n[!] Вы отказались приобретать Артефакт для оружия!")
+//                     currentNodeKey = "cityN"
+//                 }
+//                 else {
+//                     console.log("\n[!] Недостаточно монет или у вас уже есть этот предмет!")
+//                     currentNodeKey = "swordByStar"
+//                 }
+//             }
+//             else if (next === "buyArt2") {
+//                 if (player.counter >= 50 && player.hasArts2 === false) {
+//                     player.counter -= 50
+//                     player.hasArts2 = true
+//                     player.maxHP += 50
+//                     player.currentHP += 50
+//                     console.log(`\n[!] Вы купили Артефакт для брони! Оставшиеся монеты: ${player.counter}`)
+//                     currentNodeKey = next
+//                 } else if (next === "buyArt3") {
+//                     console.log("\n[!] Вы отказались приобретать Артефакт для брони!")
+//                     currentNodeKey = "buyArt3"
+//                 }
+//                 else {
+//                     console.log("\n[!] Недостаточно монет или у вас уже есть этот предмет!")
+//                     currentNodeKey = "buyArt"
+//                 }
+//             }
+
+//             else if (next === "combatChimera") {
+//                 const win = await startBattle("Химера", 120, 20);
+//                 if (win) {
+//                     currentNodeKey = "nextPart"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "weapon") {
+//                 player.hasWeapon = true
+//                 currentNodeKey = "weapon"
+//             }
+//             else if (next === "combatChimera2") {
+//                 player.currentHP += 200
+//                 const win = await startBattle("Химера", 400, 40)
+//                 if (win) {
+//                     currentNodeKey = "back"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "armor3") {
+//                 player.hasArmor = true
+//                 player.maxHP += 100
+//                 player.currentHP = player.maxHP
+//                 currentNodeKey = "armor3"
+//             }
+//             else if (next === "back2") {
+//                 player.hasWeapon = false
+//                 currentNodeKey = "back2"
+//             }
+//             else if (next === "sword1-1") {
+//                 if (player.counter >= 200 && player.hasWeapon === false) {
+//                     player.counter -= 200
+//                     player.hasWeapon = true
+//                     console.log(`\n[!] Вы купили Железный Меч! Оставшиеся монеты: ${player.counter}`)
+//                     currentNodeKey = "sword1-1"
+//                 } else if (next === "sword2") {
+//                     console.log("\n[!] Вы отказались приобретать Железный Меч!")
+//                     currentNodeKey = "sword2"
+//                 }
+//                 else {
+//                     console.log("\n[!] Недостаточно монет или у вас уже есть Железный Меч!")
+//                     currentNodeKey = "sword1"
+//                 }
+//             }
+//             else if (next === "buyArmor") {
+//                 player.currentHP = player.maxHP
+//                 currentNodeKey = "buyArmor"
+//             }
+//             else if (next === "combatGoblinThree") {
+//                 const win = await startBattle("Гоблины", 80, 15)
+//                 if (win) {
+//                     currentNodeKey = "farm3"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "combatWolf") {
+//                 const win = await startBattle("Лютоволк", 400, 60)
+//                 if (win) {
+//                     currentNodeKey = "final"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "combatTroll") {
+//                 const win = await startBattle("Тролль", 1000, 20)
+//                 if (win) {
+//                     currentNodeKey = "final"
+//                 } else {
+//                     console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
+//                     player.currentHP = player.maxHP
+//                 }
+//             }
+//             else if (next === "combatStrazh") {
+//                 const win = await startBattle("Стражник", 3000, 100)
+//                 currentNodeKey = win ? "final" : null
+//             }
+//             else {
+//                 currentNodeKey = next
+//             }
+//             if (currentNodeKey === null && next !== null) {
+//                 console.log("\nКонец игры.")
+//             }
+//         } else {
+//             console.log("Неверный выбор.")
+//         }
+//     }
+//     rl.close()
+// }
+// startChat()
+
+const nodeHandlers = {
+    combatGoblin: async (rl) => (await startBattle(rl, "Гоблин", 70, 10)) ? "afterBattle" : "retry",
+    
+    combatChimera: async (rl) => (await startBattle(rl, "Химера", 120, 20)) ? "nextPart" : "retry",
+    
+    combatChimera2: async (rl) => {
+        player.currentHP += 200
+        return (await startBattle(rl, "Химера", 400, 40)) ? "back" : "retry"
+    },
+    
+    combatGoblinThree: async (rl) => (await startBattle(rl, "Гоблины", 80, 15)) ? "farm3" : "retry",
+    
+    combatWolf: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry",
+    
+    combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry",
+    
+    combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "final" : null,
+
+    item: async () => { player.hasItem = true; return "item"; },
+    
+    weapon: async () => { player.hasWeapon = true; return "weapon"; },
+    
+    armor3: async () => { 
+        player.hasArmor = true
+        player.maxHP += 100
+        player.currentHP = player.maxHP
+        return "armor3"
+    },
+
+    swordByStar: async () => {
+        if (player.counter >= 30 && !player.hasArts) {
+            player.counter -= 30
+            player.hasArts = true
+            console.log("\n[!] Куплен Артефакт для оружия!")
+            return "swordByStar"
+        }
+        return "cityN"
+    },
+
+    buyArt2: async () => {
+        if (player.counter >= 50 && !player.hasArts2) {
+            player.counter -= 50
+            player.hasArts2 = true
+            player.maxHP += 50;
+            player.currentHP += 50
+            console.log("\n[!] Куплен Артефакт для брони!")
+                        return "buyArt2"
+        }
+        return "buyArt3"
+    },
+
+    sword12: async () => {
+        if (player.counter >= 200 && !player.hasWeapon) {
+            player.counter -= 200
+            player.hasWeapon = true
+            console.log("\n[!] Куплен Железный Меч!")
+            return "sword12"
+        }
+        return "sword2"
+    }
+}
+
 async function startChat() {
-    // console.log(income())
     let currentNodeKey = "start"
 
     while (currentNodeKey !== null) {
         const node = dialogueTree[currentNodeKey]
         if (!node) break
 
+        console.log(`\n-----------------------------------`)
         console.log(node.npc)
+        node.options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
+        console.log("0. [Посмотреть статус персонажа]")
 
-        node.options.forEach((opt, index) => {
-            console.log(`${index + 1}. ${opt.text}`)
-        })
+        const answer = await rl.question('\nВыберите номер: ')
 
-        console.log(`0. [Посмотреть описание игрока]`)
-
-        const answer = await rl.question('\nВведите номер: ')
         if (answer === "0") {
             showPlayerStatus()
-            await rl.question('')
+            await rl.question('Нажмите Enter, чтобы вернуться...')
             console.clear()
             continue
         }
 
         const choiceIndex = parseInt(answer) - 1
+        const choice = node.options[choiceIndex]
 
-        if (node.options[choiceIndex]) {
-            let next = node.options[choiceIndex].nextNode
-            if (next === "combatGoblin") {
-                const win = await startBattle("Гоблин", 70, 10)
-                if (win) {
-                    currentNodeKey = "afterBattle"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "item") {
-                player.hasItem = true
-                currentNodeKey = "item"
-            }
+        if (!choice) {
+            console.log("Неверный ввод, попробуйте снова.")
+            continue
+        }
 
-            else if (next === "swordByStar") {
-                if (player.counter >= 30 && player.hasArts === false) {
-                    player.counter -= 30
-                    player.hasArts = true
-                    console.log(`\n[!] Вы купили Артефакт для оружия! Оставшиеся монеты: ${player.counter}`)
-                    currentNodeKey = "swordByStar"
-                } else if (next === "cityN") {
-                    console.log("\n[!] Вы отказались приобретать Артефакт для оружия!")
-                    currentNodeKey = "cityN"
-                }
-                else {
-                    console.log("\n[!] Недостаточно монет или у вас уже есть этот предмет!")
-                    currentNodeKey = "swordByStar"
-                }
-            }
-            else if (next === "buyArt2") {
-                if (player.counter >= 50 && player.hasArts2 === false) {
-                    player.counter -= 50
-                    player.hasArts2 = true
-                    player.maxHP += 50
-                    player.currentHP += 50
-                    console.log(`\n[!] Вы купили Артефакт для брони! Оставшиеся монеты: ${player.counter}`)
-                    currentNodeKey = next
-                } else if (next === "buyArt3") {
-                    console.log("\n[!] Вы отказались приобретать Артефакт для брони!")
-                    currentNodeKey = "buyArt3"
-                }
-                else {
-                    console.log("\n[!] Недостаточно монет или у вас уже есть этот предмет!")
-                    currentNodeKey = "buyArt"
-                }
-            }
+        const next = choice.nextNode;
 
-            else if (next === "combatChimera") {
-                const win = await startBattle("Химера", 120, 20);
-                if (win) {
-                    currentNodeKey = "nextPart"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "weapon") {
-                player.hasWeapon = true
-                currentNodeKey = "weapon"
-            }
-            else if (next === "combatChimera2") {
-                player.currentHP += 200
-                const win = await startBattle("Химера", 400, 40)
-                if (win) {
-                    currentNodeKey = "back"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "armor3") {
-                player.hasArmor = true
-                player.maxHP += 100
+        if (nodeHandlers[next]) {
+            const result = await nodeHandlers[next](rl)
+            
+            if (result === "retry") {
+                console.log("\n[!] Вы погибли... Но таинственная сила вернула вас назад.")
                 player.currentHP = player.maxHP
-                currentNodeKey = "armor3"
-            }
-            else if (next === "back2") {
-                player.hasWeapon = false
-                currentNodeKey = "back2"
-            }
-            else if (next === "sword1-1") {
-                if (player.counter >= 200 && player.hasWeapon === false) {
-                    player.counter -= 200
-                    player.hasWeapon = true
-                    console.log(`\n[!] Вы купили Железный Меч! Оставшиеся монеты: ${player.counter}`)
-                    currentNodeKey = "sword1-1"
-                } else if (next === "sword2") {
-                    console.log("\n[!] Вы отказались приобретать Железный Меч!")
-                    currentNodeKey = "sword2"
-                }
-                else {
-                    console.log("\n[!] Недостаточно монет или у вас уже есть Железный Меч!")
-                    currentNodeKey = "sword1"
-                }
-            }
-            else if (next === "buyArmor") {
-                player.currentHP = player.maxHP
-                currentNodeKey = "buyArmor"
-            }
-            else if (next === "combatGoblinThree") {
-                const win = await startBattle("Гоблины", 80, 15)
-                if (win) {
-                    currentNodeKey = "farm3"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "combatWolf") {
-                const win = await startBattle("Лютоволк", 400, 60)
-                if (win) {
-                    currentNodeKey = "final"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "combatTroll") {
-                const win = await startBattle("Тролль", 1000, 20)
-                if (win) {
-                    currentNodeKey = "final"
-                } else {
-                    console.log("\n[!] Вы погибли... Но таинственная сила вернула вас к началу битвы.")
-                    player.currentHP = player.maxHP
-                }
-            }
-            else if (next === "combatStrazh") {
-                const win = await startBattle("Стражник", 3000, 100)
-                currentNodeKey = win ? "final" : null
-            }
-            else {
-                currentNodeKey = next
-            }
-            if (currentNodeKey === null && next !== null) {
-                console.log("\nКонец игры.")
+            } else {
+                currentNodeKey = result
             }
         } else {
-            console.log("Неверный выбор.")
+            currentNodeKey = next
+        }
+
+        if (currentNodeKey === null && next !== null) {
+            console.log("\n--- Ваше приключение окончено! ---")
         }
     }
     rl.close()
 }
+
+console.clear()
+console.log("Добро пожаловать в игру!")
 startChat()

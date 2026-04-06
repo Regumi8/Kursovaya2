@@ -6,6 +6,8 @@ import { nodeHandlers } from './handlers.js'
 
 const rl = readline.createInterface({input, output})
 
+
+// импорт JSON файла, если не вышло выдает ошибку
 let dialogueTree;
 try {
     dialogueTree = JSON.parse(readFileSync('./dialogue.JSON', 'utf8'));
@@ -14,88 +16,31 @@ try {
     process.exit(1);
 }
 
-// const nodeHandlers = {
-//     combatGoblin: async (rl) => (await startBattle(rl, "Гоблин", 70, 10)) ? "afterBattle" : "retry",
-    
-//     combatChimera: async (rl) => (await startBattle(rl, "Химера", 120, 20)) ? "nextPart" : "retry",
-    
-//     combatChimera2: async (rl) => {
-//         player.currentHP += 200
-//         return (await startBattle(rl, "Химера", 400, 40)) ? "back" : "retry"
-//     },
-    
-//     combatGoblinThree: async (rl) => (await startBattle(rl, "Гоблины", 80, 15)) ? "farm3" : "retry",
-    
-//     combatWolf: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry",
-    
-//     combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry",
-    
-//     combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "final" : null,
 
-//     item: async () => { player.hasItem = true; return "item"; },
-    
-//     weapon: async () => { player.hasWeapon = true; return "weapon"; },
-    
-//     armor3: async () => { 
-//         player.hasArmor = true
-//         player.maxHP += 100
-//         player.currentHP = player.maxHP
-//         return "armor3"
-//     },
-
-//     swordByStar: async () => {
-//         if (player.counter >= 30 && !player.hasArts) {
-//             player.counter -= 30
-//             player.hasArts = true
-//             console.log("\n[!] Куплен Артефакт для оружия!")
-//             return "swordByStar"
-//         }
-//         return "cityN"
-//     },
-
-//     buyArt2: async () => {
-//         if (player.counter >= 50 && !player.hasArts2) {
-//             player.counter -= 50
-//             player.hasArts2 = true
-//             player.maxHP += 50;
-//             player.currentHP += 50
-//             console.log("\n[!] Куплен Артефакт для брони!")
-//                         return "buyArt2"
-//         }
-//         return "buyArt3"
-//     },
-
-//     sword12: async () => {
-//         if (player.counter >= 200 && !player.hasWeapon) {
-//             player.counter -= 200
-//             player.hasWeapon = true
-//             console.log("\n[!] Куплен Железный Меч!")
-//             return "sword12"
-//         }
-//         return "sword2"
-//     }
-// }
-
+// функция чата
 async function startChat() {
     let currentNodeKey = "start"
 
+    // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {
         const node = dialogueTree[currentNodeKey]
         if (!node) break
 
         console.log(`\n-----------------------------------`)
         console.log(node.npc)
+
+        // функция для отображения статуса
         node.options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
         console.log("0. [Посмотреть статус персонажа]")
 
-        const answer = await rl.question('\nВыберите номер: ')
+        const answer = await rl.question('\nВыберите номер: ') // читатель ответа пользоватьеля
 
         if (answer === "0") {
             showPlayerStatus()
             await rl.question('Нажмите Enter, чтобы вернуться...')
             console.clear()
             continue
-        }
+        } // читатель нолика статуса
 
         const choiceIndex = parseInt(answer) - 1
         const choice = node.options[choiceIndex]
@@ -107,17 +52,20 @@ async function startChat() {
 
         const next = choice.nextNode;
 
+
+        //конструкция для работы handlers.js импорт константы из файла
         if (nodeHandlers[next]) {
             const result = await nodeHandlers[next](rl)
             
+            //если результат боя поражение, то currentNodeKey не пишем, чтобы цикл сам нчался сначала
             if (result === "retry") {
                 console.log("\n[!] Вы погибли... Но таинственная сила вернула вас назад.")
                 player.currentHP = player.maxHP
             } else {
-                currentNodeKey = result
+                currentNodeKey = result //если победили, то идем дальше по диалоговому джейсон файлу идем
             }
         } else {
-            currentNodeKey = next
+            currentNodeKey = next 
         }
 
         if (currentNodeKey === null && next !== null) {
@@ -127,6 +75,7 @@ async function startChat() {
     rl.close()
 }
 
+//запуск игры
 console.clear()
 console.log("Добро пожаловать в игру!")
 startChat()

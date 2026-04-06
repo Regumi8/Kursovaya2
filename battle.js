@@ -1,16 +1,19 @@
 import { income, action } from './bat.js'
 import { player } from './player.js'
 
+// универсальная функция боя
 export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
     let currentEnemyHP = enemyHP
 
+    // условие для того, чтобы текущее ХП не превышало максимальное
     if (player.currentHP > player.maxHP) {
         player.currentHP -= player.currentHP % player.maxHP
     }
 
     console.log(`\n========== НАЧАЛО БОЯ С ${enemyName.toUpperCase()} ==========`)
 
+    //цикл конкретного боя, пока у одного из нас не закончится хп
     while (player.currentHP > 0 && currentEnemyHP > 0) {
 
         console.log(`\n-------------------`)
@@ -24,6 +27,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
         let enemyAction
 
+        // рандом действий мобов
         if (enemyName === "Тролль" || enemyName === "Химера") {
             enemyAction = action() === 0 ? "attack" : "heal"
         } else {
@@ -32,6 +36,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         let playerLog = ""
         let enemyLog = ""
 
+        // действия игрока
         if (move === "1") {
 
             let damage = 10
@@ -72,6 +77,8 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         } else {
             console.log("Вы замешкались, пропуск хода!")
         }
+
+        // действия мобов
         if (enemyAction === "attack" && currentEnemyHP > 0) {
             let eDamage = enemyDamage
             if (move === "2") {
@@ -97,6 +104,8 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         console.log(`>${enemyLog}`)
 
     }
+
+    // получение монет с мобов
     if (player.currentHP > 0) {
         let reward = enemyName === "Гоблин" ? income() + 70 : income() + 120
         player.counter += reward

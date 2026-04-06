@@ -1,3 +1,4 @@
+//функции рандома income() для получения монет, action() для рандомного действия мобов
 export function income() { let a = Math.floor(Math.random() * 50)
     return a
 }

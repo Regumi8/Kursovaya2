@@ -1,7 +1,8 @@
-import { startBattle } from './battle.js'
+import { startBattle } from './battle.js' //чтобы все работало и изменяющимися переменнымии player, нужно импортировать player.js во все файлы
 import { player } from './player.js'
 
 export const nodeHandlers = {
+    //укороченные функции отдельных боев, получения предметов
     combatGoblin: async (rl) => (await startBattle(rl, "Гоблин", 70, 10)) ? "afterBattle" : "retry",
     
     combatChimera: async (rl) => (await startBattle(rl, "Химера", 120, 20)) ? "nextPart" : "retry",
@@ -23,6 +24,7 @@ export const nodeHandlers = {
     
     weapon: async () => { player.hasWeapon = true; return "weapon"; },
     
+    //функции характеристик предметов и их влияния на игрока
     armor3: async () => { 
         player.hasArmor = true
         player.maxHP += 100

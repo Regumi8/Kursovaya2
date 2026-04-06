@@ -1,3 +1,4 @@
+//информация об игроке
 export const player = {
     name: "Искатель приключений",
     maxHP: 500,
@@ -11,6 +12,7 @@ export const player = {
     description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
 }
 
+//функция отрисовки статуса игрока
 export function showPlayerStatus() {
     console.log("\n===============================")
     console.log(`ПЕРСОНАЖ: ${player.name}`)

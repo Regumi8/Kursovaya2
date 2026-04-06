@@ -2,6 +2,7 @@ import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { readFileSync } from 'node:fs'
 import player from './player.json' with {type: 'json'}
+import { income } from './bat.js'
 
 const rl = readline.createInterface({input, output})
 
@@ -53,9 +54,9 @@ async function startBattle(enemyName, enemyHP, enemyDamage) {
         let enemyAction
 
         if (enemyName === "Тролль" || enemyName === "Химера") {
-            enemyAction = Math.randath.floor(Mom() * 2) === 0 ? "attack" : "heal";
+            enemyAction = action() === 0 ? "attack" : "heal"
         } else {
-            enemyAction = Math.floor(Math.random() * 2) === 0 ? "attack" : "defense";
+            enemyAction = action() === 0 ? "attack" : "defense";
         }
         let playerLog = ""
         let enemyLog = ""
@@ -126,7 +127,7 @@ async function startBattle(enemyName, enemyHP, enemyDamage) {
 
     }
     if (player.currentHP > 0) {
-        let reward = enemyName === "Гоблин" ? Math.floor(Math.random() * 50) + 70 : Math.floor(Math.random() * 50) + 120
+        let reward = enemyName === "Гоблин" ? income() + 70 : income() + 120
         player.counter += reward
         console.log(`\nПОБЕДА! Вы нашли ${reward} монет. Теперь у вас ${player.counter}.`)
         return true
@@ -136,7 +137,7 @@ async function startBattle(enemyName, enemyHP, enemyDamage) {
     }
 }
 async function startChat() {
-
+    // console.log(income())
     let currentNodeKey = "start"
 
     while (currentNodeKey !== null) {

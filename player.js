@@ -2,7 +2,7 @@ export const player = {
     name: "Искатель приключений",
     maxHP: 500,
     currentHP: 500,
-    counter: 500,
+    counter: 0,
     hasItem: false,
     hasWeapon: false,
     hasArts: false,

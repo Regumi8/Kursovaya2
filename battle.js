@@ -1,5 +1,5 @@
-import { income, action } from '../GPT/bat.js';
-import { player } from '../GPT/player.js';
+import { income, action } from './bat.js'
+import { player } from './player.js'
 
 export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 

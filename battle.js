@@ -1,5 +1,6 @@
 import { income, action } from './bat.js'
 import { player } from './player.js'
+import { handlePlayerMove } from './combatActions.js'
 
 // универсальная функция боя
 export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
@@ -35,88 +36,17 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         let playerLog = ""
         let enemyLog = ""
 
-        // действия игрока
-        if (move === "1") {
+        const result = handlePlayerMove(move, player, enemyName, enemyAction, currentEnemyHP);
 
-            let damage = 10
-
-            if (player.hasWeapon) {
-                damage += 10
-                playerLog = `Вы нанесли ${damage} повышенный урон. `
-            } else if (player.hasBlessedSword) {
-                damage += 50
-                playerLog = `Вы нанесли ${damage} повышенный урон. `
-            } else {
-                damage += 0
-                playerLog = `Вы нанесли ${damage} урона. `
-            }
-            if (player.hasArts3) {
-                damage += 30
-                playerLog = `Вы нанесли ${damage} повышенный урон. `
-            } else {
-                damage += 0
-            }
-            if (!player.hasArts) {
-                damage += 0
-                playerLog = `Вы нанесли ${damage} урона. `
-            } else {
-                damage += 5
-                playerLog = `Вы нанесли ${damage} повышенный урон. `
-            }
-            if (player.hasItem && Math.random() < 0.5) {
-                damage = damage * 2
-                playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `
-            } else if (player.hasSoulStone && Math.random() < 0.75){
-                damage = damage * 3
-                playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `
-            } else {
-                playerLog = `Вы нанесли ${damage} урона. `
-            }
-
-            if (enemyAction === "defense") {
-                if (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") {
-                    damage -= 100
-                    enemyLog = `${enemyName} защитился. `
-                } else {
-                    damage -= 10
-                    enemyLog = `${enemyName} защитился. `
-                }
-            }
-
-            currentEnemyHP -= damage
-
-        } else if (move === "2") {
-            playerLog = "Вы защищаетесь. "
-        } else if (move === "3") {
-            let healing = 30
-            if (player.hasArts2) {
-                healing += 40
-                player.currentHP += healing 
-            } else {
-                healing += 0
-                player.currentHP += healing
-            }
-            if (player.hasArts3){
-                healing += 20
-                player.currentHP += healing
-            } else {
-                healing += 0
-                player.currentHP += healing
-            }
-            // условие для того, чтобы текущее ХП не превышало максимальное
-            if (player.currentHP > player.maxHP) {
-                player.currentHP = player.maxHP
-            }
-            playerLog = `Исцеление игрока ${healing} ХП.`
-        } else {
-            console.log("Вы замешкались, пропуск хода!")
-        }
+        playerLog = result.playerLog
+        enemyLog += result.enemyLog
+        currentEnemyHP = result.updatedEnemyHP
 
         // действия мобов
         if (enemyAction === "attack" && currentEnemyHP > 0) {
             let eDamage = enemyDamage
             if (move === "2") {
-                eDamage -= 3
+                eDamage -= 30
                 playerLog += "Защита сработала!"
             }
 

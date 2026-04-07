@@ -91,7 +91,7 @@ export const nodeHandlers = {
             player.maxHP += 50;
             player.currentHP += 50
             console.log("\n[!] Куплен Браслет исцеления!")
-                        return "buyArt2"
+            return "buyArt2"
         }
         console.log("\n[!] Недостаточно монет!")
         return "buyArt"
@@ -103,9 +103,10 @@ export const nodeHandlers = {
             player.hasWeapon = true
             console.log("\n[!] Куплен Железный Меч!")
             return "sword12"
+        } else {
+            console.log("\n[!] Недостаточно монет!")
+            return "sword1"
         }
-        console.log("\n[!] Недостаточно монет!")
-        return "sword1"
     },
 
     farm8: async () => {
@@ -141,8 +142,8 @@ export const nodeHandlers = {
                 console.log("\n[!] Вы обмениваете Броню Химеры на Пластинчатый Доспех!")
                 player.hasArmor = false
                 player.hasPlateArmor = true
-                player.maxHP += 350
-                player.currentHP += 350
+                player.maxHP += 250
+                player.currentHP += 250
             } else { 
                 player.hasPlateArmor = true
                 player.maxHP += 350

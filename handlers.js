@@ -14,23 +14,23 @@ export const nodeHandlers = {
     
     combatGoblinThree: async (rl) => (await startBattle(rl, "Гоблины", 80, 15)) ? "farm3" : "retry",
     
-    combatWolf: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry",
+    combatWolf: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "finalArc" : "retry",
     
-    combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry",
+    combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "finalArc" : "retry",
 
     combatWolf1: async (rl) => {
         player.currentHP = player.maxHP
-        (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry"
+        (await startBattle(rl, "Лютоволк", 400, 60)) ? "finalArc" : "retry"
 
     },
     
     combatTroll1: async (rl) => {
         player.currentHP = player.maxHP
-        (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry"
+        (await startBattle(rl, "Тролль", 1000, 20)) ? "finalArc" : "retry"
 
     },
     
-    combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "final" : null,
+    combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "finalArc" : null,
 
     combatGolem: async (rl) => {
         player.currentHP = player.maxHP
@@ -42,6 +42,8 @@ export const nodeHandlers = {
         (await startBattle(rl, "Хобгоблин", 500, 30)) ? "farm3" : "retry"
 
     },
+
+    startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 5000, 70)) ? "victory" : "retry",
 
     item: async () => { player.hasItem = true; return "item"; },
     
@@ -106,5 +108,87 @@ export const nodeHandlers = {
         player.counter += 400
         console.log("Награда за охоту 400 монет")
         return "farm6"
+    },
+
+    newQuest: async () => {
+        player.counter += 800
+        console.log("Награда за охоту 800 монет")
+        return "newQuest"
+    },
+
+    buyPlateArmor: async () => {
+        const cost = 300
+        if (player.counter >= cost) {
+            player.counter -= cost
+            
+            // Логика замены:
+            if (player.hasArmor) {
+                console.log("\n[!] Вы обмениваете Броню Химеры на Пластинчатый Доспех!")
+                player.hasArmor = false
+                player.hasPlateArmor = true
+                player.maxHP += 350
+                player.currentHP += 350
+            } else { 
+                player.hasPlateArmor = true
+                player.maxHP += 350
+                player.currentHP += 350
+                console.log("\n[!] Вы получили Пластинчатый Доспех!")
+            }
+            
+            console.log(`Осталось монет: ${player.counter}`)
+            return "buyPlateArmor"
+            
+        } else {
+            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+            return "vexShop"
+        }
+    },
+
+    buyBlessedSword: async () => {
+        const cost = 250
+        if (player.counter >= cost) {
+            player.counter -= cost
+            
+            // Логика замены:
+            if (player.hasWeapon) {
+                console.log("\n[!] Вы обмениваете Железный Меч на Благословенный Меч!")
+                player.hasWeapon = false
+                player.hasBlessedSword = true
+            } else { 
+                player.hasBlessedSword = true
+                console.log("\n[!] Вы получили Благословенный Меч!")
+            }
+            
+            console.log(`Осталось монет: ${player.counter}`)
+            return "buyBlessedSword"
+            
+        } else {
+            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+            return "vexShop"
+        }
+    },
+
+    buySoulStone: async () => {
+        const cost = 200
+        if (player.counter >= cost) {
+            player.counter -= cost
+            
+            // Логика замены:
+            if (player.hasItem) {
+                console.log("\n[!] Вы обмениваете Амулет Крита на Камень Душ!")
+                player.hasItem = false
+                player.hasSoulStone = true
+            } else {
+                player.hasSoulStone = true
+                console.log("\n[!] Вы получили Камень Душ!")
+            }
+            
+            console.log(`Осталось монет: ${player.counter}`)
+            return "buySoulStone"
+            
+        } else {
+            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+            return "vexShop"
+        }
     }
 }

@@ -19,7 +19,7 @@ try {
 
 // функция чата
 async function startChat() {
-    let currentNodeKey = "start"
+    let currentNodeKey = "finalArc"
 
     // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {
@@ -37,7 +37,7 @@ async function startChat() {
 
         if (answer === "0") {
             showPlayerStatus()
-            await rl.question('Нажмите Enter, чтобы вернуться...')
+            await rl.question("Нажмите Enter, чтобы вернуться в диалог...")
             console.clear()
             continue
         } // читатель нолика статуса

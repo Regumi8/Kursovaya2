@@ -41,12 +41,15 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
             let damage = 10
 
-            if (!player.hasWeapon) {
-                damage += 0
-                playerLog = `Вы нанесли ${damage} урона. `
-            } else {
+            if (player.hasWeapon) {
                 damage += 10
                 playerLog = `Вы нанесли ${damage} повышенный урон. `
+            } else if (player.hasBlessedSword) {
+                damage += 50
+                playerLog = `Вы нанесли ${damage} повышенный урон. `
+            } else {
+                damage += 0
+                playerLog = `Вы нанесли ${damage} урона. `
             }
             if (!player.hasArts) {
                 damage += 0
@@ -58,13 +61,21 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             if (player.hasItem && Math.random() < 0.5) {
                 damage = damage * 2
                 playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `
+            } else if (player.hasSoulStone && Math.random() < 0.75){
+                damage = damage * 3
+                playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `
             } else {
                 playerLog = `Вы нанесли ${damage} урона. `
             }
 
             if (enemyAction === "defense") {
-                damage -= 10
-                enemyLog = `${enemyName} защитился. `
+                if (enemyName === "Вечный Страж") {
+                    damage -= 100
+                    enemyLog = `${enemyName} защитился. `
+                } else {
+                    damage -= 10
+                    enemyLog = `${enemyName} защитился. `
+                }
             }
 
             currentEnemyHP -= damage
@@ -74,10 +85,10 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         } else if (move === "3") {
             let healing
             if (player.hasArts2) {
-                healing = 40
+                healing = 70
                 player.currentHP += healing 
             } else {
-                healing = 25
+                healing = 30
                 player.currentHP += healing
             }
             playerLog = `Исцеление игрока ${healing} ХП.`

@@ -33,18 +33,18 @@ export function showPlayerStatus() {
     
     // Отображаем либо Благословенный Меч, либо Железный Меч
     if (player.hasBlessedSword) {
-        console.log(`ОРУЖИЕ: Благословенный Меч (+50)`);
+        console.log(`ОРУЖИЕ: Благословенный Меч (+50 урон)`);
     } else if (player.hasWeapon) {
-        console.log(`ОРУЖИЕ: Железный меч (+10)`);
+        console.log(`ОРУЖИЕ: Железный меч (+10 урон)`);
     } else {
         console.log(`ОРУЖИЕ: Пусто`);
     }
     
-    console.log(`АРТЕФАКТ: ${player.hasArts ? "Огненная гарда (+5)" : "Пусто"}`);
+    console.log(`АРТЕФАКТ: ${player.hasArts ? "Огненная гарда (+5 урон)" : "Пусто"}`);
     
     // Отображаем либо Пластинчатый Доспех, либо Броню Химеры
     if (player.hasPlateArmor) {
-        console.log(`БРОНЯ: Пластинчатый Доспех (+350 ХП)`);
+        console.log(`БРОНЯ: Пластинчатый Доспех (+350 ХП, защита +50)`);
     } else if (player.hasArmor) {
         console.log(`БРОНЯ: Броня Химеры (+100 ХП)`);
     } else {

@@ -43,9 +43,9 @@ export const nodeHandlers = {
 
     },
 
-    startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 3500, 50)) ? "afterBattleEternalGuardian" : "retry",
+    startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 4000, 70)) ? "afterBattleEternalGuardian" : "retry",
 
-    startBattleAbyssalKnight: async (rl) => (await startBattle(rl, "Рыцарь Бездны", 4000, 65)) ? "afterBattleAbyssalKnight" : "retry",
+    startBattleAbyssalKnight: async (rl) => (await startBattle(rl, "Рыцарь Бездны", 6000, 85)) ? "afterBattleAbyssalKnight" : "retry",
 
     startBattleFinalBoss: async (rl) => {
         console.log("\n[!!!] ВНИМАНИЕ: ФИНАЛЬНАЯ БИТВА [!!!]")

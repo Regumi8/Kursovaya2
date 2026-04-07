@@ -1,3 +1,5 @@
+import { deffenseE, crit, maxHPP } from "./bat.js";
+
 export function handlePlayerMove(move, player, enemyName, enemyAction, currentEnemyHP) {
     let playerLog = "";
     let enemyLog = "";
@@ -19,10 +21,10 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
         if (player.hasArts) damage += 5;
 
         // Логика крита
-        if (player.hasSoulStone && Math.random() < 0.75) {
+        if (player.hasSoulStone && crit(player)) {
             damage *= 3;
             playerLog = `КРИТИЧЕСКИЙ УДАР (Камень Душ)! Вы нанесли ${damage} урона. `;
-        } else if (player.hasItem && Math.random() < 0.5) {
+        } else if (player.hasItem && crit(player)) {
             damage *= 2;
             playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `;
         } else {
@@ -31,8 +33,8 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
 
         // Защита врага
         if (enemyAction === "defense") {
-            const defensePower = (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") ? 100 : 10;
-            damage = Math.max(0, damage - defensePower) // Урон не может быть меньше 0
+            let defensePower = (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") ? 100 : 10;
+            damage = deffenseE(damage, defensePower) // Урон не может быть меньше 0
             enemyLog = `${enemyName} защитился (поглощено ${defensePower}). `
         }
 
@@ -50,13 +52,11 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
 
         player.currentHP += healing
 
-        // Ограничение по MaxHP
-        if (player.currentHP > player.maxHP) {
-            player.currentHP = player.maxHP
-        }
+        //Проверка, чтобы ХП не стало больше максимального из файла bat.js
+        maxHPP(player)
         playerLog = `Вы использовали исцеление и восстановили ${healing} ХП.`
 
-    // --- ПРОПУСК ХОДА ---
+    // пропуск хода
     } else {
         playerLog = "Вы замешкались и пропустили ход! "
     }

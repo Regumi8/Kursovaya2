@@ -1,4 +1,4 @@
-import { income, action } from './bat.js'
+import { income, action, deffenseP, maxHPE } from './bat.js'
 import { player } from './player.js'
 import { handlePlayerMove } from './combatActions.js'
 
@@ -38,6 +38,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
         const result = handlePlayerMove(move, player, enemyName, enemyAction, currentEnemyHP);
 
+        //вызов рузельтатов из функции в combatActions
         playerLog = result.playerLog
         enemyLog += result.enemyLog
         currentEnemyHP = result.updatedEnemyHP
@@ -45,15 +46,18 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         // действия мобов
         if (enemyAction === "attack" && currentEnemyHP > 0) {
             let eDamage = enemyDamage
-            if (move === "2") {
-                eDamage -= 30
-                playerLog += "Защита сработала!"
+
+            if (move === "2") { 
+                let playerDefense = 30
+                if (player.hasPlateArmor) playerDefense += 50
+                eDamage = deffenseP(enemyDamage, playerDefense) // урон не должен быть меньше нуля
+                playerLog += "Ваша защита сработала! "
             }
 
             player.currentHP -= eDamage
-
-            enemyLog += `${enemyName} атакует и наносит ${eDamage} урона.`
-
+            
+            enemyLog += `${enemyName} атакует и наносит ${eDamage} урона. `
+        
         } else if (enemyAction === "defense" && enemyLog === "") {
             enemyLog = `${enemyName} защищается.`
         } else if (enemyAction === "heal" && enemyLog === "") {
@@ -66,10 +70,8 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             }
             currentEnemyHP += healAmount
 
-            // Проверка, чтобы ХП не стало больше максимального
-            if (currentEnemyHP > enemyHP) {
-                currentEnemyHP = enemyHP
-            }
+            // Проверка, чтобы ХП не стало больше максимального из файла bat.js
+            maxHPE(currentEnemyHP, enemyHP)
 
             enemyLog = `${enemyName} исцеляется на ${healAmount} ХП.`
         }

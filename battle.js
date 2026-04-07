@@ -28,7 +28,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         let enemyAction
 
         // рандом действий мобов
-        if (enemyName === "Тролль" || enemyName === "Химера") {
+        if (enemyName === "Тролль" || enemyName === "Матерая Химера" || enemyName === "Химера") {
             enemyAction = action() === 0 ? "attack" : "heal"
         } else {
             enemyAction = action() === 0 ? "attack" : "defense";
@@ -63,7 +63,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             }
 
             if (enemyAction === "defense") {
-                damage -= 3
+                damage -= 10
                 enemyLog = `${enemyName} защитился. `
             }
 
@@ -72,8 +72,15 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         } else if (move === "2") {
             playerLog = "Вы защищаетесь. "
         } else if (move === "3") {
-            player.currentHP += 15
-            playerLog = "Исцеление игрока +15 ХП. "
+            let healing
+            if (player.hasArts2) {
+                healing = 40
+                player.currentHP += healing 
+            } else {
+                healing = 25
+                player.currentHP += healing
+            }
+            playerLog = `Исцеление игрока ${healing} ХП.`
         } else {
             console.log("Вы замешкались, пропуск хода!")
         }
@@ -92,7 +99,11 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         } else if (enemyAction === "defense" && enemyLog === "") {
             enemyLog = `${enemyName} защищается.`
         } else if (enemyAction === "heal" && enemyLog === "") {
-            currentEnemyHP += 40
+            if (enemyName === "Химера") {
+                currentEnemyHP += 20
+            } else {
+                currentEnemyHP += 40
+            }
             if (enemyHP < currentEnemyHP) {
                 currentEnemyHP = enemyHP
             }

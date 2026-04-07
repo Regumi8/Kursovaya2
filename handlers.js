@@ -9,7 +9,7 @@ export const nodeHandlers = {
     
     combatChimera2: async (rl) => {
         player.currentHP += 200
-        return (await startBattle(rl, "Химера", 400, 40)) ? "back" : "retry"
+        return (await startBattle(rl, "Матерая Химера", 400, 40)) ? "back" : "retry"
     },
     
     combatGoblinThree: async (rl) => (await startBattle(rl, "Гоблины", 80, 15)) ? "farm3" : "retry",
@@ -17,8 +17,31 @@ export const nodeHandlers = {
     combatWolf: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry",
     
     combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry",
+
+    combatWolf1: async (rl) => {
+        player.currentHP = player.maxHP
+        (await startBattle(rl, "Лютоволк", 400, 60)) ? "final" : "retry"
+
+    },
+    
+    combatTroll1: async (rl) => {
+        player.currentHP = player.maxHP
+        (await startBattle(rl, "Тролль", 1000, 20)) ? "final" : "retry"
+
+    },
     
     combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "final" : null,
+
+    combatGolem: async (rl) => {
+        player.currentHP = player.maxHP
+        (await startBattle(rl, "Голем", 1000, 25)) ? "farm3" : "retry"
+    },
+
+    combatGoblinThree: async (rl) => {
+        player.currentHP = player.maxHP
+        (await startBattle(rl, "Хобгоблин", 500, 30)) ? "farm3" : "retry"
+
+    },
 
     item: async () => { player.hasItem = true; return "item"; },
     
@@ -32,6 +55,7 @@ export const nodeHandlers = {
         return "armor3"
     },
 
+    // функции покупки снаряжения
     swordByStar: async () => {
         if (player.counter >= 30 && !player.hasArts) {
             player.counter -= 30
@@ -39,7 +63,8 @@ export const nodeHandlers = {
             console.log("\n[!] Куплен Артефакт для оружия!")
             return "swordByStar"
         }
-        return "cityN"
+        console.log("\n[!] Недостаточно монет!")
+        return "item2"
     },
 
     buyArt2: async () => {
@@ -51,7 +76,8 @@ export const nodeHandlers = {
             console.log("\n[!] Куплен Артефакт для брони!")
                         return "buyArt2"
         }
-        return "buyArt3"
+        console.log("\n[!] Недостаточно монет!")
+        return "buyArt"
     },
 
     sword12: async () => {
@@ -61,6 +87,24 @@ export const nodeHandlers = {
             console.log("\n[!] Куплен Железный Меч!")
             return "sword12"
         }
+        console.log("\n[!] Недостаточно монет!")
+        return "sword1"
+    },
+
+    farm8: async () => {
+        if (player.counter >= 500 && !player.hasArmor) {
+            player.counter -= 500
+            player.hasArmor = true
+            console.log("\n[!] Куплена броня!")
+            return "farm8"
+        }
+        console.log("\n[!] Недостаточно монет!")
         return "sword2"
+    },
+
+    farm6: async () => {
+        player.counter += 400
+        console.log("Награда за охоту 400 монет")
+        return "farm6"
     }
 }

@@ -47,8 +47,8 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
     // исцеление
     } else if (move === "3") {
         let healing = 30
-        if (player.hasArts2) healing += 40
-        if (player.hasArts3) healing += 20
+        if (player.hasArts2) healing += 50
+        if (player.hasArts3) healing += 30
 
         player.currentHP += healing
 

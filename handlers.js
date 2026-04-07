@@ -18,40 +18,27 @@ export const nodeHandlers = {
     
     combatTroll: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "finalArc" : "retry",
 
-    combatWolf1: async (rl) => {
-        player.currentHP = player.maxHP
-        (await startBattle(rl, "Лютоволк", 400, 60)) ? "finalArc" : "retry"
-
-    },
+    combatWolf1: async (rl) => (await startBattle(rl, "Лютоволк", 400, 60)) ? "finalArc" : "retry",
     
-    combatTroll1: async (rl) => {
-        player.currentHP = player.maxHP
-        (await startBattle(rl, "Тролль", 1000, 20)) ? "finalArc" : "retry"
-
-    },
+    combatTroll1: async (rl) => (await startBattle(rl, "Тролль", 1000, 20)) ? "finalArc" : "retry",
     
     combatStrazh: async (rl) => (await startBattle(rl, "Стражник", 3000, 100)) ? "finalArc" : null,
 
-    combatGolem: async (rl) => {
-        player.currentHP = player.maxHP
-        (await startBattle(rl, "Голем", 1000, 25)) ? "farm3" : "retry"
-    },
+    combatGolem: async (rl) => (await startBattle(rl, "Голем", 1000, 25)) ? "farm3" : "retry",
 
-    combatGoblinThree: async (rl) => {
-        player.currentHP = player.maxHP
-        (await startBattle(rl, "Хобгоблин", 500, 30)) ? "farm3" : "retry"
-
-    },
+    combatGoblinThree: async (rl) => (await startBattle(rl, "Хобгоблин", 500, 30)) ? "farm3" : "retry",
 
     startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 4000, 70)) ? "afterBattleEternalGuardian" : "retry",
 
-    startBattleAbyssalKnight: async (rl) => (await startBattle(rl, "Рыцарь Бездны", 6000, 85)) ? "afterBattleAbyssalKnight" : "retry",
+    startBattleAbyssalKnight: async (rl) => (await startBattle(rl, "Рыцарь Бездны", 6000, 55)) ? "afterBattleAbyssalKnight" : "retry",
 
     startBattleFinalBoss: async (rl) => {
         console.log("\n[!!!] ВНИМАНИЕ: ФИНАЛЬНАЯ БИТВА [!!!]")
         const win = await startBattle(rl, "Повелитель Тумана", 10000, 110)
         return win ? "afterBattleFinalBoss" : "retry"
     },
+
+    back2: async () => { player.hasWeapon = false; return "back2"; },
 
     item: async () => { player.hasItem = true; return "item"; },
     
@@ -113,6 +100,8 @@ export const nodeHandlers = {
         if (player.counter >= 500 && !player.hasArmor) {
             player.counter -= 500
             player.hasArmor = true
+            player.maxHP += 100
+            player.currentHP += 100
             console.log("\n[!] Куплена Броня Химеры!")
             return "farm8"
         }

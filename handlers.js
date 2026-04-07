@@ -43,7 +43,15 @@ export const nodeHandlers = {
 
     },
 
-    startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 5000, 70)) ? "victory" : "retry",
+    startBattleEternalGuardian: async (rl) => (await startBattle(rl, "Вечный Страж", 3500, 50)) ? "afterBattleEternalGuardian" : "retry",
+
+    startBattleAbyssalKnight: async (rl) => (await startBattle(rl, "Рыцарь Бездны", 4000, 65)) ? "afterBattleAbyssalKnight" : "retry",
+
+    startBattleFinalBoss: async (rl) => {
+        console.log("\n[!!!] ВНИМАНИЕ: ФИНАЛЬНАЯ БИТВА [!!!]")
+        const win = await startBattle(rl, "Повелитель Тумана", 10000, 110)
+        return win ? "afterBattleFinalBoss" : "retry"
+    },
 
     item: async () => { player.hasItem = true; return "item"; },
     
@@ -55,6 +63,13 @@ export const nodeHandlers = {
         player.maxHP += 100
         player.currentHP = player.maxHP
         return "armor3"
+    },
+
+    kulonAbyssalKnights: async () => {
+        player.hasArts3 = true
+        player.maxHP += 200
+        player.currentHP = player.maxHP
+        return "kulonAbyssalKnights"
     },
 
     // функции покупки снаряжения
@@ -75,7 +90,7 @@ export const nodeHandlers = {
             player.hasArts2 = true
             player.maxHP += 50;
             player.currentHP += 50
-            console.log("\n[!] Куплен Артефакт для брони!")
+            console.log("\n[!] Куплен Браслет исцеления!")
                         return "buyArt2"
         }
         console.log("\n[!] Недостаточно монет!")
@@ -97,7 +112,7 @@ export const nodeHandlers = {
         if (player.counter >= 500 && !player.hasArmor) {
             player.counter -= 500
             player.hasArmor = true
-            console.log("\n[!] Куплена броня!")
+            console.log("\n[!] Куплена Броня Химеры!")
             return "farm8"
         }
         console.log("\n[!] Недостаточно монет!")

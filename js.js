@@ -19,7 +19,7 @@ try {
 
 // функция чата
 async function startChat() {
-    let currentNodeKey = "finalArc"
+    let currentNodeKey = "start"
 
     // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {

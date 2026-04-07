@@ -6,9 +6,8 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
     let currentEnemyHP = enemyHP
 
-    // условие для того, чтобы текущее ХП не превышало максимальное
     if (player.currentHP > player.maxHP) {
-        player.currentHP -= player.currentHP % player.maxHP
+        player.currentHP = player.maxHP
     }
 
     console.log(`\n========== НАЧАЛО БОЯ С ${enemyName.toUpperCase()} ==========`)
@@ -28,7 +27,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         let enemyAction
 
         // рандом действий мобов
-        if (enemyName === "Тролль" || enemyName === "Матерая Химера" || enemyName === "Химера") {
+        if (enemyName === "Тролль" || enemyName === "Матерая Химера" || enemyName === "Химера" || enemyName === "Рыцарь Бездны") {
             enemyAction = action() === 0 ? "attack" : "heal"
         } else {
             enemyAction = action() === 0 ? "attack" : "defense";
@@ -51,6 +50,12 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
                 damage += 0
                 playerLog = `Вы нанесли ${damage} урона. `
             }
+            if (player.hasArts3) {
+                damage += 30
+                playerLog = `Вы нанесли ${damage} повышенный урон. `
+            } else {
+                damage += 0
+            }
             if (!player.hasArts) {
                 damage += 0
                 playerLog = `Вы нанесли ${damage} урона. `
@@ -69,7 +74,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             }
 
             if (enemyAction === "defense") {
-                if (enemyName === "Вечный Страж") {
+                if (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") {
                     damage -= 100
                     enemyLog = `${enemyName} защитился. `
                 } else {
@@ -83,13 +88,24 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
         } else if (move === "2") {
             playerLog = "Вы защищаетесь. "
         } else if (move === "3") {
-            let healing
+            let healing = 30
             if (player.hasArts2) {
-                healing = 70
+                healing += 40
                 player.currentHP += healing 
             } else {
-                healing = 30
+                healing += 0
                 player.currentHP += healing
+            }
+            if (player.hasArts3){
+                healing += 20
+                player.currentHP += healing
+            } else {
+                healing += 0
+                player.currentHP += healing
+            }
+            // условие для того, чтобы текущее ХП не превышало максимальное
+            if (player.currentHP > player.maxHP) {
+                player.currentHP = player.maxHP
             }
             playerLog = `Исцеление игрока ${healing} ХП.`
         } else {
@@ -107,19 +123,27 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             player.currentHP -= eDamage
 
             enemyLog += `${enemyName} атакует и наносит ${eDamage} урона.`
+
         } else if (enemyAction === "defense" && enemyLog === "") {
             enemyLog = `${enemyName} защищается.`
         } else if (enemyAction === "heal" && enemyLog === "") {
+            let healAmount = 40 // Стандартное исцеление
+
             if (enemyName === "Химера") {
-                currentEnemyHP += 20
-            } else {
-                currentEnemyHP += 40
+                healAmount = 20
+            } else if (enemyName === "Рыцарь Бездны") {
+                healAmount = 80
             }
-            if (enemyHP < currentEnemyHP) {
+            currentEnemyHP += healAmount
+
+            // Проверка, чтобы ХП не стало больше максимального
+            if (currentEnemyHP > enemyHP) {
                 currentEnemyHP = enemyHP
             }
-            enemyLog = `${enemyName} исцеляется.`
+
+            enemyLog = `${enemyName} исцеляется на ${healAmount} ХП.`
         }
+
 
         console.log(`\n[РЕЗУЛЬТАТ ХОДА]`)
         console.log(`>${playerLog}`)

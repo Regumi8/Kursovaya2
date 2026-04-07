@@ -4,13 +4,14 @@ export const player = {
     maxHP: 500,
     currentHP: 500,
     counter: 0,
-    hasItem: true,
+    hasItem: false,
     hasSoulStone: false,
-    hasWeapon: true,
+    hasWeapon: false,
     hasBlessedSword: false,
-    hasArts: true,
-    hasArts2: true,
-    hasArmor: true,
+    hasArts: false,
+    hasArts2: false,
+    hasArts3: false,
+    hasArmor: false,
     hasPlateArmor: false,
     description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
 }
@@ -50,7 +51,7 @@ export function showPlayerStatus() {
         console.log(`БРОНЯ: Пусто`);
     }
     
-    console.log(`АКСЕССУАРЫ: ${player.hasArts2 ? "Браслет исцеления (+50 ХП, +15 лечение)" : "Пусто"}`); 
+    console.log(`АКСЕССУАРЫ: ${player.hasArts2 ? "Браслет исцеления (+50 ХП, +15 лечение)" : "Пусто"}/${player.hasArts3 ? "Ожерелье Рыцаря Бездны (+200 ХП, +20 лечение, +30 урон)" : "Пусто"}`); 
     
     console.log(`ОПИСАНИЕ: ${player.description}`);
     console.log("=================================");

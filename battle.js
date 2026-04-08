@@ -71,7 +71,7 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
             currentEnemyHP += healAmount
 
             // Проверка, чтобы ХП не стало больше максимального из файла bat.js
-            maxHPE(currentEnemyHP, enemyHP)
+            currentEnemyHP = maxHPE(currentEnemyHP, enemyHP)
 
             enemyLog = `${enemyName} исцеляется на ${healAmount} ХП.`
         }

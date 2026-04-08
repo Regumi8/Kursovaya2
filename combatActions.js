@@ -53,7 +53,7 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
         player.currentHP += healing
 
         //Проверка, чтобы ХП не стало больше максимального из файла bat.js
-        maxHPP(player)
+        player.currentHP = maxHPP(player)
         playerLog = `Вы использовали исцеление и восстановили ${healing} ХП.`
 
     // пропуск хода

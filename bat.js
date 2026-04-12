@@ -38,3 +38,31 @@ export function maxHPP(player) {
         player.currentHP = player.maxHP
     } return player.currentHP
 }
+
+export function armor(player) {
+    if (player.hasArmor) {
+        player.maxHP += 100
+        return player.maxHP
+    } 
+}
+
+export function item1(player) {
+    if (player.hasArts2) {
+        player.maxHP += 50
+        return player.maxHP
+    }
+}
+
+export function item2(player) {
+    if (player.hasArts3) {
+        player.maxHP += 200
+        return player.maxHP
+    }
+}
+
+export function armor2(player) {
+    if (player.hasPlateArmor) {
+        player.maxHP += 350
+        return player.maxHP
+    }
+}

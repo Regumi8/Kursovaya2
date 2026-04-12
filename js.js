@@ -1,7 +1,7 @@
 import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { readFileSync } from 'node:fs'
-import { player, showPlayerStatus } from './player.js'
+import { player, showPlayerStatus, applyItemHPBonuses } from './player.js'
 import { nodeHandlers } from './handlers.js'
 
 const rl = readline.createInterface({input, output})
@@ -19,7 +19,8 @@ try {
 
 // функция чата
 async function startChat() {
-    let currentNodeKey = "start"
+    applyItemHPBonuses()
+    let currentNodeKey = "finalArc"
 
     // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {

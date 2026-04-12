@@ -1,4 +1,4 @@
-import { income, action, deffenseP, maxHPE } from './bat.js'
+import { income, action, deffenseP, maxHPE, maxHPP } from './bat.js'
 import { player } from './player.js'
 import { handlePlayerMove } from './combatActions.js'
 
@@ -7,9 +7,10 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
     let currentEnemyHP = enemyHP
 
-    if (player.currentHP > player.maxHP) {
-        player.currentHP = player.maxHP
-    }
+    // if (player.currentHP > player.maxHP) {
+    //     player.currentHP = player.maxHP
+    // }
+    player.currentHP = maxHPP(player)
 
     console.log(`\n========== НАЧАЛО БОЯ С ${enemyName.toUpperCase()} ==========`)
 

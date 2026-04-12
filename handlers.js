@@ -1,5 +1,5 @@
 import { startBattle } from './battle.js' //чтобы все работало и изменяющимися переменнымии player, нужно импортировать player.js во все файлы
-import { player } from './player.js'
+import { player, applyItemHPBonuses } from './player.js'
 
 export const nodeHandlers = {
     //укороченные функции отдельных боев, получения предметов
@@ -43,19 +43,27 @@ export const nodeHandlers = {
     item: async () => { player.hasItem = true; return "item"; },
     
     weapon: async () => { player.hasWeapon = true; return "weapon"; },
+
+    //функция проверки снаряжения перед битвой с боссом
+    guardian: async () => {if (player.hasBlessedSword && player.hasPlateArmor && player.hasSoulStone){
+            return "guardian"
+        } else {
+            console.log("\n=============================\nВы не справитесь с боссом с текущим снаряжением, приобретите его у Векса\n=============================")
+            return "vexShop"
+        }
+    },
     
     //функции характеристик предметов и их влияния на игрока
+
     armor3: async () => { 
         player.hasArmor = true
-        player.maxHP += 100
-        player.currentHP = player.maxHP
+        applyItemHPBonuses()
         return "armor3"
     },
 
     kulonAbyssalKnights: async () => {
         player.hasArts3 = true
-        player.maxHP += 200
-        player.currentHP = player.maxHP
+        applyItemHPBonuses()
         return "kulonAbyssalKnights"
     },
 
@@ -75,8 +83,7 @@ export const nodeHandlers = {
         if (player.counter >= 50 && !player.hasArts2) {
             player.counter -= 50
             player.hasArts2 = true
-            player.maxHP += 50;
-            player.currentHP += 50
+            applyItemHPBonuses()
             console.log("\n[!] Куплен Браслет исцеления!")
             return "buyArt2"
         }
@@ -100,8 +107,7 @@ export const nodeHandlers = {
         if (player.counter >= 500 && !player.hasArmor) {
             player.counter -= 500
             player.hasArmor = true
-            player.maxHP += 100
-            player.currentHP += 100
+            applyItemHPBonuses()
             console.log("\n[!] Куплена Броня Химеры!")
             return "farm8"
         }
@@ -122,77 +128,94 @@ export const nodeHandlers = {
     },
 
     buyPlateArmor: async () => {
-        const cost = 300
-        if (player.counter >= cost) {
+        let cost = 300
+        if (player.counter >= cost && !player.hasPlateArmor) {
             player.counter -= cost
             
             // Логика замены:
             if (player.hasArmor) {
-                console.log("\n[!] Вы обмениваете Броню Химеры на Пластинчатый Доспех!")
+                console.log("\n=============================\n[!] Вы обмениваете Броню Химеры на Пластинчатый Доспех!\n=============================")
                 player.hasArmor = false
                 player.hasPlateArmor = true
-                player.maxHP += 250
-                player.currentHP += 250
+                applyItemHPBonuses()
             } else { 
                 player.hasPlateArmor = true
-                player.maxHP += 350
-                player.currentHP += 350
-                console.log("\n[!] Вы получили Пластинчатый Доспех!")
+                applyItemHPBonuses()
+                console.log("\n=============================\n[!] Вы получили Пластинчатый Доспех!\n=============================")
             }
             
             console.log(`Осталось монет: ${player.counter}`)
             return "buyPlateArmor"
             
-        } else {
-            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+        } else if (player.hasPlateArmor) {
+            console.log("\n=============================\nУ вас уже есть Пластинчатый Доспех\n=============================")
+            return "vexShop"
+        } else if(player.counter < cost) {
+            console.log(`\n=============================\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.\n=============================`)
+            console.log("Векс сжалился над вами и дал снаряжение бесплатно, вы ж герой")
+            cost = 0
+            player.hasPlateArmor = true
+            applyItemHPBonuses()
             return "vexShop"
         }
     },
 
     buyBlessedSword: async () => {
-        const cost = 250
-        if (player.counter >= cost) {
+        let cost = 250
+        if (player.counter >= cost && !player.hasBlessedSword) {
             player.counter -= cost
             
             // Логика замены:
             if (player.hasWeapon) {
-                console.log("\n[!] Вы обмениваете Железный Меч на Благословенный Меч!")
+                console.log("\n=============================\n[!] Вы обмениваете Железный Меч на Благословенный Меч!\n=============================")
                 player.hasWeapon = false
                 player.hasBlessedSword = true
             } else { 
                 player.hasBlessedSword = true
-                console.log("\n[!] Вы получили Благословенный Меч!")
+                console.log("\n=============================\n[!] Вы получили Благословенный Меч!\n=============================")
             }
             
             console.log(`Осталось монет: ${player.counter}`)
             return "buyBlessedSword"
-            
-        } else {
-            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+        
+        } else if (player.hasBlessedSword) {
+            console.log("\n=============================\nУ вас уже есть Благословенный Меч\n=============================")
+            return "vexShop"
+        } else if (player.counter < cost) {
+            console.log(`\n=============================\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.\n=============================`)
+            console.log("Векс сжалился над вами и дал снаряжение бесплатно, вы ж герой")
+            cost = 0
+            player.hasBlessedSword = true
             return "vexShop"
         }
     },
 
     buySoulStone: async () => {
-        const cost = 200
-        if (player.counter >= cost) {
+        let cost = 200
+        if (player.counter >= cost && !player.hasSoulStone) {
             player.counter -= cost
             
             // Логика замены:
             if (player.hasItem) {
-                console.log("\n[!] Вы обмениваете Амулет Крита на Камень Душ!")
+                console.log("\n=============================\n[!] Вы обмениваете Амулет Крита на Камень Душ!\n=============================")
                 player.hasItem = false
                 player.hasSoulStone = true
             } else {
                 player.hasSoulStone = true
-                console.log("\n[!] Вы получили Камень Душ!")
+                console.log("\n=============================\n[!] Вы получили Камень Душ!\n=============================")
             }
             
             console.log(`Осталось монет: ${player.counter}`)
             return "buySoulStone"
             
-        } else {
-            console.log(`\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.`)
+        } else if (player.hasSoulStone) {
+            console.log("\n=============================\nУ вас уже есть Камень Душ>\n=============================")
+            return "vexShop"
+        } else if (player.counter < cost) {
+            console.log(`\n=============================\n[!] Недостаточно монет! Нужно ${cost}, у вас ${player.counter}.\n=============================`)
+            console.log("Векс сжалился над вами и дал снаряжение бесплатно, вы ж герой")
+            cost = 0
+            player.hasSoulStone = true
             return "vexShop"
         }
     }

@@ -1,39 +1,29 @@
-import { deffenseE, crit, maxHPP } from "./bat.js";
+import { deffenseE, crit, maxHPP } from "./bat.js"
+import { calculatePlayerDamage } from './player.js'
 
 export function handlePlayerMove(move, player, enemyName, enemyAction, currentEnemyHP) {
-    let playerLog = "";
-    let enemyLog = "";
-    let updatedEnemyHP = currentEnemyHP;
+    let playerLog = ""
+    let enemyLog = ""
+    let updatedEnemyHP = currentEnemyHP
 
     // атака
     if (move === "1") {
-        let damage = 10;
-
-        // Бонусы оружия
-        if (player.hasBlessedSword) {
-            damage += 50;
-        } else if (player.hasWeapon) {
-            damage += 10;
-        }
-
-        // Бонусы артефактов
-        if (player.hasArts3) damage += 30;
-        if (player.hasArts) damage += 5;
+        let damage = calculatePlayerDamage()
 
         // Логика крита
         if (player.hasSoulStone && crit(player)) {
-            damage *= 3;
-            playerLog = `КРИТИЧЕСКИЙ УДАР (Камень Душ)! Вы нанесли ${damage} урона. `;
+            damage *= 3
+            playerLog = `КРИТИЧЕСКИЙ УДАР (Камень Душ)! Вы нанесли ${damage} урона. `
         } else if (player.hasItem && crit(player)) {
-            damage *= 2;
-            playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `;
+            damage *= 2
+            playerLog = `КРИТИЧЕСКИЙ УДАР! Вы нанесли ${damage} урона. `
         } else {
-            playerLog = `Вы нанесли ${damage} урона. `;
+            playerLog = `Вы нанесли ${damage} урона. `
         }
 
         // Защита врага
         if (enemyAction === "defense") {
-            let defensePower = (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") ? 100 : 10;
+            let defensePower = (enemyName === "Вечный Страж" || enemyName === "Повелитель Тумана") ? 100 : 10
             damage = deffenseE(damage, defensePower) // Урон не может быть меньше 0
             enemyLog = `${enemyName} защитился (поглощено ${defensePower}). `
         }

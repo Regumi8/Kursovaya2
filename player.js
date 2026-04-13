@@ -4,7 +4,7 @@ export const player = {
     baseHP: 500,
     maxHP: 500,
     currentHP: 500,
-    counter: -800,
+    counter: 0,
     hasItem: false,
     hasSoulStone: false,
     hasWeapon: false,
@@ -12,7 +12,7 @@ export const player = {
     hasArts: false,
     hasArts2: false,
     hasArts3: false,
-    hasArmor: true,
+    hasArmor: false,
     hasPlateArmor: false,
     description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
 }
@@ -33,26 +33,59 @@ export function applyItemHPBonuses() {
     if (player.hasArts2) {
         bonusHP += 50
     }
-
+    //предмет с босса
     if (player.hasArts3) {
         bonusHP += 200
     }
-    // Дополнительный артефакт (если он даёт ХП)
-    // if (player.hasArts3) { bonusHP += 20; } // Если hasArts3 даёт ХП
 
     player.maxHP += bonusHP
     player.currentHP += bonusHP
-    // Убедимся, что текущее ХП не превышает новое максимальное
-    player.currentHP = Math.min(player.currentHP, player.maxHP)
 }
 
-//функция отрисовки статуса игрока
-export function showPlayerStatus() {
-    console.log("\n===============================")
-    console.log(`ПЕРСОНАЖ: ${player.name}`)
-    console.log(`ДЕНЬГИ: ${player.counter}`)
-    console.log(`ЗДОРОВЬЕ: ${player.currentHP}/${player.maxHP}`)
-    
+// функция для отрисовки и изменения урона
+export function calculatePlayerDamage() {
+    let totalDamage = 10
+
+    // Оружие
+    if (player.hasBlessedSword) {
+        totalDamage += 50
+    } else if (player.hasWeapon) {
+        totalDamage += 10
+    }
+
+    // Артефакты, которые складываются
+    if (player.hasArts) {
+        totalDamage += 5
+    }
+    if (player.hasArts3) { 
+        totalDamage += 30
+    }
+
+    return totalDamage
+}
+
+export function showInventory() {
+    console.log("\n===== ИНВЕНТАРЬ =====")
+
+    // оружие
+    if (player.hasBlessedSword) {
+        console.log(`ОРУЖИЕ: Благословенный Меч (+50 урон)`)
+    } else if (player.hasWeapon) {
+        console.log(`ОРУЖИЕ: Железный меч (+10 урон)`)
+    } else {
+        console.log(`ОРУЖИЕ: Пусто`)
+    }
+
+    //броня
+    if (player.hasPlateArmor) {
+        console.log(`БРОНЯ: Пластинчатый Доспех (+350 ХП, защита +50)`)
+    } else if (player.hasArmor) {
+        console.log(`БРОНЯ: Броня Химеры (+100 ХП)`)
+    } else {
+        console.log(`БРОНЯ: Пусто`)
+    }
+
+    //предметы
     if (player.hasSoulStone) {
         console.log(`ПРЕДМЕТЫ: Камень Душ (шанс крита 75%)`)
     } else if (player.hasItem) {
@@ -61,28 +94,21 @@ export function showPlayerStatus() {
         console.log(`ПРЕДМЕТЫ: Пусто`)
     }
     
-    // Отображаем либо Благословенный Меч, либо Железный Меч
-    if (player.hasBlessedSword) {
-        console.log(`ОРУЖИЕ: Благословенный Меч (+50 урон)`)
-    } else if (player.hasWeapon) {
-        console.log(`ОРУЖИЕ: Железный меч (+10 урон)`)
-    } else {
-        console.log(`ОРУЖИЕ: Пусто`)
-    }
-    
+    //артефакты
     console.log(`АРТЕФАКТ: ${player.hasArts ? "Огненная гарда (+5 урон)" : "Пусто"}`)
     
-    // Отображаем либо Пластинчатый Доспех, либо Броню Химеры
-    if (player.hasPlateArmor) {
-        console.log(`БРОНЯ: Пластинчатый Доспех (+350 ХП, защита +50)`)
-    } else if (player.hasArmor) {
-        console.log(`БРОНЯ: Броня Химеры (+100 ХП)`)
-    } else {
-        console.log(`БРОНЯ: Пусто`)
-    }
-    
+    //аксессуары
     console.log(`АКСЕССУАРЫ: ${player.hasArts2 ? "Браслет исцеления (+50 ХП, +50 лечение)" : "Пусто"}/${player.hasArts3 ? "Ожерелье Рыцаря Бездны (+200 ХП, +30 лечение, +30 урон)" : "Пусто"}`)
-    
+}
+
+//функция отрисовки статуса игрока
+export function showPlayerStatus() {
+    const currentTotalDamage = calculatePlayerDamage();
+    console.log("\n===============================")
+    console.log(`ПЕРСОНАЖ: ${player.name}`)
+    console.log(`ДЕНЬГИ: ${player.counter}`)
+    console.log(`ЗДОРОВЬЕ: ${player.currentHP}/${player.maxHP}`)
+    console.log(`УРОН: ${currentTotalDamage} (без учета критов)`);
     console.log(`ОПИСАНИЕ: ${player.description}`)
     console.log("=================================")
 }

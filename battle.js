@@ -7,9 +7,6 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
     let currentEnemyHP = enemyHP
 
-    // if (player.currentHP > player.maxHP) {
-    //     player.currentHP = player.maxHP
-    // }
     player.currentHP = maxHPP(player)
 
     console.log(`\n========== НАЧАЛО БОЯ С ${enemyName.toUpperCase()} ==========`)
@@ -76,7 +73,6 @@ export async function startBattle(rl, enemyName, enemyHP, enemyDamage) {
 
             enemyLog = `${enemyName} исцеляется на ${healAmount} ХП.`
         }
-
 
         console.log(`\n[РЕЗУЛЬТАТ ХОДА]`)
         console.log(`>${playerLog}`)

@@ -1,7 +1,7 @@
 import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 import { readFileSync } from 'node:fs'
-import { player, showPlayerStatus, applyItemHPBonuses } from './player.js'
+import { player, showPlayerStatus, applyItemHPBonuses, showInventory } from './player.js'
 import { nodeHandlers } from './handlers.js'
 
 const rl = readline.createInterface({input, output})
@@ -20,7 +20,7 @@ try {
 // функция чата
 async function startChat() {
     applyItemHPBonuses()
-    let currentNodeKey = "finalArc"
+    let currentNodeKey = "start"
 
     // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {
@@ -33,6 +33,7 @@ async function startChat() {
         // функция для отображения статуса
         node.options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
         console.log("0. [Посмотреть статус персонажа]")
+        console.log("i. [Открыть инвентарь]")
 
         const answer = await rl.question('\nВыберите номер: ') // читатель ответа пользоватьеля
 
@@ -43,7 +44,14 @@ async function startChat() {
             continue
         } // читатель нолика статуса
 
-        const choiceIndex = parseInt(answer) - 1
+        if (answer.toLowerCase() === "i") {
+            showInventory();
+            await rl.question("Нажмите Enter, чтобы вернуться в диалог...");
+            console.clear();
+            continue;
+        } // читатель кнопки инвентаря
+
+        const choiceIndex = parseInt(answer, 10) - 1
         const choice = node.options[choiceIndex]
 
         if (!choice) {

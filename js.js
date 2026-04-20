@@ -27,6 +27,10 @@ async function startChat() {
 
     // цикл для работы диалогового окна (пока nextNoded не равен null цикл работает)
     while (currentNodeKey !== null) {
+        if (player.healCounter > 0) {
+            player.healCounter -= 1
+        }
+
         const node = dialogueTree[currentNodeKey]
         if (!node) {
             console.error(`Узел диалога "${currentNodeKey}" не найден!`)

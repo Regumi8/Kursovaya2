@@ -8,6 +8,7 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
 
     // атака
     if (move === "1") {
+        player.healCounter -= 1
         let damage = calculatePlayerDamage()
 
         // Логика крита
@@ -32,19 +33,28 @@ export function handlePlayerMove(move, player, enemyName, enemyAction, currentEn
 
     // защита
     } else if (move === "2") {
+        player.healCounter -= 1
         playerLog = "Вы встали в защитную стойку. "
 
     // исцеление
     } else if (move === "3") {
-        let healing = 30
-        if (player.hasArts2) healing += 50
-        if (player.hasArts3) healing += 30
+        //функция для отката исцеления
+        if (player.healCounter > 0) {
+            player.healCounter -= 1
+            playerLog = `Исцеление в откате, подожди ${player.healCounter} ход(а)`
+        } else {
+            let healing = 30
+            if (player.hasArts2) healing += 50
+            if (player.hasArts3) healing += 30
 
-        player.currentHP += healing
+            player.currentHP += healing
 
-        //Проверка, чтобы ХП не стало больше максимального из файла bat.js
-        player.currentHP = maxHPP(player)
-        playerLog = `Вы использовали исцеление и восстановили ${healing} ХП.`
+            //Проверка, чтобы ХП не стало больше максимального из файла bat.js
+            player.currentHP = maxHPP(player)
+
+            player.healCounter = 2
+            playerLog = `Вы использовали исцеление и восстановили ${healing} ХП, следующее исцеление возможно через 2 хода`
+        }
 
     // пропуск хода
     } else {

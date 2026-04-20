@@ -4,6 +4,7 @@ export const player = {
     baseHP: 500,
     maxHP: 500,
     currentHP: 500,
+    healCounter: 0,
     counter: 0,
     hasItem: false,
     hasSoulStone: false,

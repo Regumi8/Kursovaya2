@@ -1,0 +1,20 @@
+{
+  "name": "Искатель приключений",
+  "baseHP": 500,
+  "maxHP": 1100,
+  "currentHP": 510,
+  "healCounter": 0,
+  "counter": 1511,
+  "inventory": [],
+  "completedPaths": [],
+  "hasItem": true,
+  "hasSoulStone": true,
+  "hasWeapon": true,
+  "hasBlessedSword": true,
+  "hasArts": true,
+  "hasArts2": true,
+  "hasArts3": true,
+  "hasArmor": true,
+  "hasPlateArmor": true,
+  "description": "Вы — путник в поношенном плаще, ищущий славы в землях города N."
+}

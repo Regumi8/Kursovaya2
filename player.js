@@ -1,20 +1,22 @@
 //информация об игроке
 export const player = {
     name: "Искатель приключений",
-    baseHP: 500,
-    maxHP: 500,
-    currentHP: 500,
+    baseHP: 5000,
+    maxHP: 5000,
+    currentHP: 5000,
     healCounter: 0,
     counter: 0,
+    inventory: [],
+    completedPaths: [],
     hasItem: false,
-    hasSoulStone: false,
+    hasSoulStone: true,
     hasWeapon: false,
-    hasBlessedSword: false,
-    hasArts: false,
-    hasArts2: false,
-    hasArts3: false,
+    hasBlessedSword: true,
+    hasArts: true,
+    hasArts2: true,
+    hasArts3: true,
     hasArmor: false,
-    hasPlateArmor: false,
+    hasPlateArmor: true,
     description: "Вы — путник в поношенном плаще, ищущий славы в землях города N."
 }
 
@@ -45,7 +47,7 @@ export function applyItemHPBonuses() {
 
 // функция для отрисовки и изменения урона
 export function calculatePlayerDamage() {
-    let totalDamage = 10
+    let totalDamage = 100
 
     // Оружие
     if (player.hasBlessedSword) {
@@ -65,51 +67,100 @@ export function calculatePlayerDamage() {
     return totalDamage
 }
 
+//функция отрисовки инвентаря
 export function showInventory() {
-    console.log("\n===== ИНВЕНТАРЬ =====")
+    console.log("\n═══════════════════════════════════════════════")
+    console.log("                  ИНВЕНТАРЬ")
+    console.log("═══════════════════════════════════════════════\n")
 
-    // оружие
+    // ОРУЖИЕ
+    console.log("【 ОРУЖИЕ 】")
     if (player.hasBlessedSword) {
-        console.log(`ОРУЖИЕ: Благословенный Меч (+50 урон)`)
+        console.log("  • Благословенный Меч (+50 урон)")
     } else if (player.hasWeapon) {
-        console.log(`ОРУЖИЕ: Железный меч (+10 урон)`)
+        console.log("  • Железный меч (+10 урон)")
     } else {
-        console.log(`ОРУЖИЕ: Пусто`)
+        console.log("  • [Пусто]")
     }
 
-    //броня
+    // БРОНЯ
+    console.log("\n【 БРОНЯ 】")
     if (player.hasPlateArmor) {
-        console.log(`БРОНЯ: Пластинчатый Доспех (+350 ХП, защита +50)`)
+        console.log("  • Пластинчатый Доспех (+350 ХП, защита +50)")
     } else if (player.hasArmor) {
-        console.log(`БРОНЯ: Броня Химеры (+100 ХП)`)
+        console.log("  • Броня Химеры (+100 ХП)")
     } else {
-        console.log(`БРОНЯ: Пусто`)
+        console.log("  • [Пусто]")
     }
 
-    //предметы
+    // ПРЕДМЕТЫ УСИЛЕНИЯ
+    console.log("\n【 ПРЕДМЕТЫ УСИЛЕНИЯ 】")
     if (player.hasSoulStone) {
-        console.log(`ПРЕДМЕТЫ: Камень Душ (шанс крита 75%)`)
+        console.log("  • Камень Душ (шанс крита 75%)")
     } else if (player.hasItem) {
-        console.log(`ПРЕДМЕТЫ: Амулет Крита (шанс крита 50%)`)
+        console.log("  • Амулет Крита (шанс крита 50%)")
     } else {
-        console.log(`ПРЕДМЕТЫ: Пусто`)
+        console.log("  • [Пусто]")
     }
-    
-    //артефакты
-    console.log(`АРТЕФАКТ: ${player.hasArts ? "Огненная гарда (+5 урон)" : "Пусто"}`)
-    
-    //аксессуары
-    console.log(`АКСЕССУАРЫ: ${player.hasArts2 ? "Браслет исцеления (+50 ХП, +50 лечение)" : "Пусто"}/${player.hasArts3 ? "Ожерелье Рыцаря Бездны (+200 ХП, +30 лечение, +30 урон)" : "Пусто"}`)
+
+    // АРТЕФАКТЫ
+    console.log("\n【 АРТЕФАКТЫ 】")
+    console.log(`  • ${player.hasArts ? "Огненная гарда (+5 урон)" : "[Пусто]"}`)
+
+    // АКСЕССУАРЫ
+    console.log("\n【 АКСЕССУАРЫ 】")
+    const accessories = []
+    if (player.hasArts2) accessories.push("Браслет исцеления (+50 ХП, +50 лечение)")
+    if (player.hasArts3) accessories.push("Ожерелье Рыцаря Бездны (+200 ХП, +30 лечение, +30 урон)")
+    if (accessories.length > 0) {
+        accessories.forEach(item => console.log(`  • ${item}`))
+    } else {
+        console.log("  • [Пусто]")
+    }
+
+    // КВЕСТОВЫЕ ПРЕДМЕТЫ
+    console.log("\n【 КВЕСТОВЫЕ ПРЕДМЕТЫ 】")
+    if (player.inventory && Array.isArray(player.inventory) && player.inventory.length > 0) {
+        player.inventory.forEach(item => {
+            console.log(`  • ${item}`)
+        })
+    } else {
+        console.log("  • [Пусто]")
+    }
+
+    console.log("\n═══════════════════════════════════════════════")
 }
 
 //функция отрисовки статуса игрока
 export function showPlayerStatus() {
-    const currentTotalDamage = calculatePlayerDamage();
-    console.log("\n===============================")
-    console.log(`ПЕРСОНАЖ: ${player.name}`)
-    console.log(`ДЕНЬГИ: ${player.counter}`)
-    console.log(`ЗДОРОВЬЕ: ${player.currentHP}/${player.maxHP}`)
-    console.log(`УРОН: ${currentTotalDamage} (без учета критов)`);
-    console.log(`ОПИСАНИЕ: ${player.description}`)
-    console.log("=================================")
+    const currentTotalDamage = calculatePlayerDamage()
+    
+    console.log("\n═══════════════════════════════════════════════")
+    console.log("                  СТАТУС ПЕРСОНАЖА")
+    console.log("═══════════════════════════════════════════════\n")
+    
+    console.log(`【 ИМЯ 】`)
+    console.log(`  • ${player.name}`)
+    
+    console.log(`\n【 ЗДОРОВЬЕ 】`)
+    console.log(`  • ${player.currentHP} / ${player.maxHP} HP`)
+    
+    // Визуальная полоска здоровья
+    const healthPercent = (player.currentHP / player.maxHP) * 100
+    const barLength = 20
+    const filledLength = Math.round(barLength * healthPercent / 100)
+    const emptyLength = barLength - filledLength
+    const healthBar = "█".repeat(filledLength) + "░".repeat(emptyLength)
+    console.log(`  • [${healthBar}] ${Math.round(healthPercent)}%`)
+    
+    console.log(`\n【 УРОН 】`)
+    console.log(`  • ${currentTotalDamage} (без учёта критических ударов)`)
+    
+    console.log(`\n【 МОНЕТЫ 】`)
+    console.log(`  • ${player.counter} золотых`)
+    
+    console.log(`\n【 ОПИСАНИЕ 】`)
+    console.log(`  • ${player.description}`)
+    
+    console.log("\n═══════════════════════════════════════════════")
 }

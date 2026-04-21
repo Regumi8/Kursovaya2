@@ -1,0 +1,83 @@
+{
+    "victory": {
+      "npc": "\nАдминистратор: Невероятно! Владыка Тумана пал. Но из-за его смерти в подвале открылся древний разлом.",
+      "options": [{ "text": "Что мне делать?", "nextNode": "admin_quest" }]
+    },
+    "admin_quest": {
+      "npc": "Администратор: Вы должны запечатать разлом. Прямо под нами — три этажа ада. Удачи.",
+      "options": [{ "text": "Спуститься на 1-й этаж", "nextNode": "dungeon_hub_1" }]
+    },
+
+    
+    "f1_s_b1": { "npc": "Вас атакует Чумная Крыса!", "options": [{ "text": "В бой!", "nextNode": "fight_rat" }] },
+    "f1_s_b2": { "npc": "Из тени выходит Скелет-дозорный!", "options": [{ "text": "В бой!", "nextNode": "fight_skeleton" }] },
+    
+    "checkKey1": {
+      "npc": "Дверь заперта. Нужен ключ.",
+      "options": [{ "text": "Попробовать открыть (нужен Ржавый ключ)", "nextNode": "f1_r_b1" }]
+    },
+    
+    "f1_r_b1": { "npc": "За дверью на вас прыгает Голодный Гуль!", "options": [{ "text": "В бой!", "nextNode": "fight_ghoul" }] },
+    "f1_r_b2": { "npc": "Путь преграждает Гниющий Зомби!", "options": [{ "text": "В бой!", "nextNode": "fight_zombie" }] },
+    "dungeon_right_1": { "npc": "В сундуке лежит Магическая Сфера!", "options": [{ "text": "Взять и вернуться", "nextNode": "takeOrb" }] },
+
+    "f1_l_b1": { "npc": "Путь преграждает Скользкая Слизь!", "options": [{ "text": "В бой!", "nextNode": "fight_slime" }] },
+    "f1_l_b2": { "npc": "В воздухе материализуется Призрак!", "options": [{ "text": "В бой!", "nextNode": "fight_ghost" }] },
+    "checkOrb": {
+      "npc": "Путь дальше преграждает магический туман.",
+      "options": [{ "text": "Попытаться пройти (нужна Сфера)", "nextNode": "floor_2_start" }]
+    },
+
+    "floor_2_start": {
+      "npc": "[ЭТАЖ 2] Вы спустились глубже. Воздух стал горячее.",
+      "options": [{ "text": "Искать центр зала", "nextNode": "dungeon_hub_2" }]
+    },
+    
+
+    "f2_s_b1": { "npc": "На вас бежит Гоблин-разведчик!", "options": [{ "text": "В бой!", "nextNode": "fight_goblin_s" }] },
+    "f2_s_b2": { "npc": "Вас атакует Гоблин-воитель!", "options": [{ "text": "В бой!", "nextNode": "fight_goblin_w" }] },
+    "checkKey2": { 
+      "npc": "Дверь закрыта. Нужен ключ.",
+      "options": [{ "text": "Попробовать открыть (нужен Серебряный ключ)", "nextNode": "f2_r_b1" }]
+    },
+
+    "f2_r_b1": { "npc": "Вас встречает Орк-пехотинец!", "options": [{ "text": "В бой!", "nextNode": "fight_orc_p" }] },
+    "f2_r_b2": { "npc": "Впереди свирепый Орк-шаман!", "options": [{ "text": "В бой!", "nextNode": "fight_orc_sh" }] },
+    "dungeon_right_2": { "npc": "На алтаре лежит Древний Амулет.", "options": [{ "text": "Взять и вернуться", "nextNode": "takeAmulet" }] },
+
+    "f2_l_b1": { "npc": "Дорогу перекрыл Хобгоблин!", "options": [{ "text": "В бой!", "nextNode": "fight_hobgoblin" }] },
+    "f2_l_b2": { "npc": "Из ямы вылезает Пещерный Тролль!", "options": [{ "text": "В бой!", "nextNode": "fight_troll" }] },
+    "checkAmulet": { 
+      "npc": "Древний механизм требует амулет.",
+      "options": [{ "text": "Попробовать активировать (нужен Амулет)", "nextNode": "floor_3_start" }]
+    },
+
+    "floor_3_start": {
+      "npc": "[ЭТАЖ 3] Вы достигли дна. Здесь всё пропитано магией.",
+      "options": [{ "text": "Идти к финалу", "nextNode": "dungeon_hub_3" }]
+    },
+    
+
+    "f3_s_b1": { "npc": "Вас атакует Низший Демон!", "options": [{ "text": "В бой!", "nextNode": "fight_demon_l" }] },
+    "f3_s_b2": { "npc": "Путь преграждает Рыцарь Бездны!", "options": [{ "text": "В бой!", "nextNode": "fight_abyss_k" }] },
+    "checkKey3": {
+      "npc": "Дверь заперта. Нужен последний ключ.",
+      "options": [{ "text": "Попробовать открыть (нужен Золотой ключ)", "nextNode": "f3_r_b1" }]
+    },
+
+    "f3_r_b1": { "npc": "С потолка пикирует Горгулья!", "options": [{ "text": "В бой!", "nextNode": "fight_gargoyle" }] },
+    "f3_r_b2": { "npc": "Оживает Каменный Голем!", "options": [{ "text": "В бой!", "nextNode": "fight_golem" }] },
+    "dungeon_right_3": { "npc": "В чаше сияет Корона Теней!", "options": [{ "text": "Взять и вернуться", "nextNode": "takeCrown" }] },
+
+    "f3_l_b1": { "npc": "Из пустоты выходит Теневой Охотник!", "options": [{ "text": "В бой!", "nextNode": "fight_shadow" }] },
+    "talkWithGuardian" : { "npc": "Хранитель Разлома: Покажи Корону Теней!", "options": [{ "text": "Предъявить пропуск", "nextNode": "f3_l_b2" }]},
+    "f3_l_b2": {
+      "npc": "Хранитель Разлома: Сразимся же, герой, победивший Владыку Тумана!",
+      "options": [{ "text": "ФИНАЛЬНЫЙ БОЙ", "nextNode": "fight_guardian" }]
+    },
+
+    "final_victory_scene": {
+      "npc": "Разлом запечатан! Вы выбрались на поверхность великим героем.",
+      "options": [{ "text": "Конец игры", "nextNode": null }]
+    }
+}

@@ -218,5 +218,5 @@ export const nodeHandlers = {
             player.hasSoulStone = true
             return "vexShop"
         }
-    }
+    },
 }

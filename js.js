@@ -1,19 +1,50 @@
 import * as readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
-import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
 import { player, showPlayerStatus, applyItemHPBonuses, showInventory } from './player.js'
 import { nodeHandlers } from './handlers.js'
 import { saveGame, loadGame, deleteSaveGame } from './saveManager.js'
 import { helper } from './bat.js'
+import { dungeonHandlers } from './dangHand.js'
+
+const allHandlers = {
+    ...nodeHandlers,
+    ...dungeonHandlers
+}
 
 const rl = readline.createInterface({input, output})
 
-// импорт JSON файла, если не вышло выдает ошибку
+// импорт JSON файлов, если не вышло выдает ошибку
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+
+const dialoguePath = path.join(dirname, 'dialogue.json')
+const dungeonArcPath = path.join(dirname, 'dungeonArc.json')
+
 let dialogueTree
+
 try {
-    dialogueTree = JSON.parse(readFileSync('./dialogue.JSON', 'utf8'))
-} catch (e) {
-    console.error("Ошибка: Файл dialogue.JSON не найден или поврежден!")
+    // Читаем основной файл диалогов
+    const dialogueRaw = fs.readFileSync(dialoguePath, 'utf-8')
+    const mainTree = JSON.parse(dialogueRaw)
+
+    // Читаем файл с подземельем
+    const dungeonArcRaw = fs.readFileSync(dungeonArcPath, 'utf-8')
+    const dungeonData = JSON.parse(dungeonArcRaw)
+
+    // Объединяем данные. Ключи из dungeonArcData перезапишут совпадающие из mainTree.
+    dialogueTree = { ...mainTree, ...dungeonData }
+
+    console.log("✅ Файлы диалогов успешно загружены и объединены.")
+} catch (error) {
+    console.error(`\n❌ ОШИБКА ЗАГРУЗКИ JSON:`)
+    console.error(`Не удалось найти или прочитать файлы.`)
+    console.error(`Проверьте пути и названия файлов:`)
+    console.error(`dialogue.json: ${dialoguePath}`)
+    console.error(`dungeonArc.json: ${dungeonArcPath}`)
+    console.error(`Подробности ошибки: ${error.message}`)
     process.exit(1)
 }
 
@@ -40,7 +71,28 @@ async function startChat() {
         console.log(`\n-----------------------------------`)
         console.log(node.npc)
 
-        node.options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
+        let availableOptions = node.options
+
+        // Проверяем, есть ли у опций условия
+        if (node.options.some(opt => opt.condition)) {
+            availableOptions = node.options.filter(opt => {
+                if (!opt.condition) return true
+                
+                try {
+                    // Создаём локальную переменную completedPaths
+                    const completedPaths = player.completedPaths || []
+                    // Создаём функцию, которая использует эту переменную
+                    const conditionFn = new Function('completedPaths', 'return ' + opt.condition)
+                    const result = conditionFn(completedPaths)
+                    return result
+                } catch(e) {
+                    console.log(`Ошибка в условии: ${opt.condition}`)
+                    return true
+                }
+            })
+        }
+
+        availableOptions.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
 
         const answer = await rl.question('\nВыберите номер: ') // читатель ответа пользоватьеля
 
@@ -88,7 +140,7 @@ async function startChat() {
         }
 
         const choiceIndex = parseInt(answer, 10) - 1
-        const choice = node.options[choiceIndex]
+        const choice = availableOptions[choiceIndex]
 
         if (!choice) {
             console.log("Неверный ввод, попробуйте снова.")
@@ -97,17 +149,15 @@ async function startChat() {
 
         const next = choice.nextNode
 
-
         //конструкция для работы handlers.js импорт константы из файла
-        if (nodeHandlers[next]) {
-            const result = await nodeHandlers[next](rl)
-            
-            //если результат боя поражение, то currentNodeKey не пишем, чтобы цикл сам нчался сначала
+        if (allHandlers[next]) {
+            console.log(`✅ Найден обработчик для: "${next}"`);
+            const result = await allHandlers[next](rl)
             if (result === "retry") {
                 console.log("\n[!] Вы погибли... Но таинственная сила вернула вас назад.")
                 player.currentHP = player.maxHP
             } else {
-                currentNodeKey = result //если победили, то идем дальше по диалоговому джейсон файлу идем
+                currentNodeKey = result
             }
         } else {
             currentNodeKey = next 

@@ -145,14 +145,6 @@ export function showPlayerStatus() {
     console.log(`\n【 ЗДОРОВЬЕ 】`)
     console.log(`  • ${player.currentHP} / ${player.maxHP} HP`)
     
-    // Визуальная полоска здоровья
-    const healthPercent = (player.currentHP / player.maxHP) * 100
-    const barLength = 20
-    const filledLength = Math.round(barLength * healthPercent / 100)
-    const emptyLength = barLength - filledLength
-    const healthBar = "█".repeat(filledLength) + "░".repeat(emptyLength)
-    console.log(`  • [${healthBar}] ${Math.round(healthPercent)}%`)
-    
     console.log(`\n【 УРОН 】`)
     console.log(`  • ${currentTotalDamage} (без учёта критических ударов)`)
     

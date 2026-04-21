@@ -34,9 +34,9 @@ export function saveGame() {
         // Сохраняем текущее состояние диалога
         fs.writeFileSync(dialogueSavePath, JSON.stringify(currentNodeKey, null, 2))
 
-        console.log("\n✅ Прогресс сохранен!")
+        console.log("\nПрогресс сохранен!")
     } catch (error) {
-        console.error("\n❌ Ошибка сохранения данных:", error)
+        console.error("\nОшибка сохранения данных:", error)
         console.log("\nНе удалось сохранить игру. Проверьте права на запись в папку 'saves'.")
     }
 }
@@ -58,24 +58,24 @@ export function loadGame() {
                 player.completedPaths = []
             }
             
-            console.log("\n✅ Данные игрока загружены.")
+            console.log("\nДанные игрока загружены.")
         } else {
             // НЕТ СОХРАНЕНИЯ → ПОЛНЫЙ СБРОС
             resetPlayerState()
-            console.log("\n📁 Сохраненные данные игрока не найдены. Начинаем новую игру.")
+            console.log("\nСохраненные данные игрока не найдены. Начинаем новую игру.")
         }
 
         // Загружаем состояние диалога
         if (fs.existsSync(dialogueSavePath)) {
             const savedDialogueStateData = fs.readFileSync(dialogueSavePath, 'utf-8')
             loadedDialogueState = JSON.parse(savedDialogueStateData)
-            console.log("✅ Состояние диалога загружено.")
+            console.log("Состояние диалога загружено.")
         } else {
-            console.log("📁 Сохраненное состояние диалога не найдено. Начинаем с начального узла.")
+            console.log("Сохраненное состояние диалога не найдено. Начинаем с начального узла.")
         }
 
     } catch (error) {
-        console.error("\n❌ Ошибка загрузки данных:", error)
+        console.error("\nОшибка загрузки данных:", error)
         console.log("\nНе удалось загрузить игру. Начинаем новую игру.")
         loadedDialogueState = "start"
         // ПРИ ОШИБКЕ ТОЖЕ ПОЛНЫЙ СБРОС
@@ -107,7 +107,7 @@ export function resetPlayerState() {
     player.hasPlateArmor = true
     player.description = "Вы — путник в поношенном плаще, ищущий славы в землях города N."
     
-    console.log("\n🔄 Состояние игрока сброшено к начальному.")
+    console.log("\nСостояние игрока сброшено к начальному.")
 }
 
 export function deleteSaveGame() {
@@ -117,7 +117,7 @@ export function deleteSaveGame() {
         // Удаляем файл данных игрока
         if (fs.existsSync(playerSavePath)) {
             fs.unlinkSync(playerSavePath)
-            console.log("\n🗑️ Сохранение данных игрока удалено.")
+            console.log("\nСохранение данных игрока удалено.")
             deletedSomething = true
         }
 
@@ -131,12 +131,12 @@ export function deleteSaveGame() {
         // Сбрасываем состояние игрока в памяти
         if (deletedSomething) {
             resetPlayerState()
-            console.log("\n✅ Все сохранения успешно удалены. Прогресс сброшен.")
+            console.log("\nВсе сохранения успешно удалены. Прогресс сброшен.")
         } else {
-            console.log("\n📁 Нет активных сохранений для удаления.")
+            console.log("\nНет активных сохранений для удаления.")
         }
     } catch (error) {
-        console.error("\n❌ Ошибка удаления сохранений:", error)
+        console.error("\nОшибка удаления сохранений:", error)
         console.log("\nНе удалось удалить сохранения. Проверьте права на запись в папку 'saves'.")
     }
 }

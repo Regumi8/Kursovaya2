@@ -34,12 +34,12 @@ try {
     const dungeonArcRaw = fs.readFileSync(dungeonArcPath, 'utf-8')
     const dungeonData = JSON.parse(dungeonArcRaw)
 
-    // Объединяем данные. Ключи из dungeonArcData перезапишут совпадающие из mainTree.
+    // Объединяем данные. Ключи из dungeonData перезапишут совпадающие из mainTree.
     dialogueTree = { ...mainTree, ...dungeonData }
 
-    console.log("✅ Файлы диалогов успешно загружены и объединены.")
+    console.log("Файлы диалогов успешно загружены и объединены.")
 } catch (error) {
-    console.error(`\n❌ ОШИБКА ЗАГРУЗКИ JSON:`)
+    console.error(`\nОШИБКА ЗАГРУЗКИ JSON:`)
     console.error(`Не удалось найти или прочитать файлы.`)
     console.error(`Проверьте пути и названия файлов:`)
     console.error(`dialogue.json: ${dialoguePath}`)
@@ -151,7 +151,7 @@ async function startChat() {
 
         //конструкция для работы handlers.js импорт константы из файла
         if (allHandlers[next]) {
-            console.log(`✅ Найден обработчик для: "${next}"`);
+            console.log(`Найден обработчик для: "${next}"`);
             const result = await allHandlers[next](rl)
             if (result === "retry") {
                 console.log("\n[!] Вы погибли... Но таинственная сила вернула вас назад.")

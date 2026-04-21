@@ -271,7 +271,7 @@ export const dungeonHandlers = {
             return options[choiceIndex].nextNode;
         }
         
-        console.log("❌ Неверный выбор.");
+        console.log("Неверный выбор.");
         return "dungeon_hub_1";
     },
 
@@ -313,7 +313,7 @@ export const dungeonHandlers = {
             return options[choiceIndex].nextNode;
         }
         
-        console.log("❌ Неверный выбор.");
+        console.log("Неверный выбор.");
         return "dungeon_hub_2";
     },
 
@@ -355,7 +355,7 @@ export const dungeonHandlers = {
             return options[choiceIndex].nextNode;
         }
         
-        console.log("❌ Неверный выбор.");
+        console.log("Неверный выбор.");
         return "dungeon_hub_3";
     },
 }

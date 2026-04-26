@@ -49,10 +49,10 @@ export const dungeonHandlers = {
             addItem("Ржавый ключ")
             markPathCompleted("floor1_straight")
             
-            const hubHandler = nodeHandlers.dungeon_hub_1 || dungeonHandlers?.dungeon_hub_1
-            if (hubHandler) {
-                return await hubHandler(rl)
-            }
+            // const hubHandler = nodeHandlers.dungeon_hub_1 || dungeonHandlers?.dungeon_hub_1
+            // if (hubHandler) {
+            //     return await hubHandler(rl)
+            // }
             return "dungeon_hub_1"
         }
         return "retry"
@@ -229,133 +229,133 @@ export const dungeonHandlers = {
         return "retry"
     },
 
-    dungeon_hub_1: async (rl) => {
-        console.log("🔍 Пройденные пути (1 этаж):", player.completedPaths);
-        console.log("\n[ЭТАЖ 1] Вы в центральном зале. Куда пойдем?");
+    // dungeon_hub_1: async (rl) => {
+    //     console.log("🔍 Пройденные пути (1 этаж):", player.completedPaths)
+    //     console.log("\n[ЭТАЖ 1] Вы в центральном зале. Куда пойдем?")
         
-        const options = [];
+    //     const options = []
         
-        // Прямо — только если путь ещё не пройден
-        if (!player.completedPaths?.includes('floor1_straight')) {
-            options.push({ text: "Прямо", nextNode: "f1_s_b1" });
-        } else {
-            console.log("  🚫 Прямо (уже пройдено)");
-        }
+    //     // Прямо только если путь ещё не пройден
+    //     if (!player.completedPaths?.includes('floor1_straight')) {
+    //         options.push({ text: "Прямо", nextNode: "f1_s_b1" })
+    //     } else {
+    //         console.log("  🚫 Прямо (уже пройдено)")
+    //     }
         
-        // Направо — только если путь ещё не пройден
-        if (!player.completedPaths?.includes('floor1_right')) {
-            options.push({ text: "Направо", nextNode: "checkKey1" });
-        } else {
-            console.log("  🚫 Направо (уже пройдено)");
-        }
+    //     // Направо только если путь ещё не пройден
+    //     if (!player.completedPaths?.includes('floor1_right')) {
+    //         options.push({ text: "Направо", nextNode: "checkKey1" })
+    //     } else {
+    //         console.log("  🚫 Направо (уже пройдено)")
+    //     }
         
-        // Налево — только если путь ещё не пройден
-        if (!player.completedPaths?.includes('floor1_left')) {
-            options.push({ text: "Налево", nextNode: "f1_l_b1" });
-        } else {
-            console.log("  🚫 Налево (уже пройдено)");
-        }
+    //     // Налево только если путь ещё не пройден
+    //     if (!player.completedPaths?.includes('floor1_left')) {
+    //         options.push({ text: "Налево", nextNode: "f1_l_b1" })
+    //     } else {
+    //         console.log("  🚫 Налево (уже пройдено)")
+    //     }
         
-        // Если все пути пройдены
-        if (options.length === 0) {
-            console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться дальше.");
-            return "floor_2_start";
-        }
+    //     // Если все пути пройдены
+    //     if (options.length === 0) {
+    //         console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться дальше.")
+    //         return "floor_2_start"
+    //     }
         
-        options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`));
+    //     options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
         
-        const answer = await rl.question('\nВыберите номер: ');
-        const choiceIndex = parseInt(answer, 10) - 1;
+    //     const answer = await rl.question('\nВыберите номер: ')
+    //     const choiceIndex = parseInt(answer, 10) - 1
         
-        if (options[choiceIndex]) {
-            return options[choiceIndex].nextNode;
-        }
+    //     if (options[choiceIndex]) {
+    //         return options[choiceIndex].nextNode
+    //     }
         
-        console.log("Неверный выбор.");
-        return "dungeon_hub_1";
-    },
+    //     console.log("Неверный выбор.")
+    //     return "dungeon_hub_1"
+    // },
 
-    dungeon_hub_2: async (rl) => {
-        console.log("🔍 Пройденные пути (2 этаж):", player.completedPaths);
-        console.log("\n[ЭТАЖ 2] Вы в центральном зале. Куда пойдем?");
+    // dungeon_hub_2: async (rl) => {
+    //     console.log("🔍 Пройденные пути (2 этаж):", player.completedPaths)
+    //     console.log("\n[ЭТАЖ 2] Вы в центральном зале. Куда пойдем?")
         
-        const options = [];
+    //     const options = []
         
-        if (!player.completedPaths?.includes('floor2_straight')) {
-            options.push({ text: "Прямо", nextNode: "f2_s_b1" });
-        } else {
-            console.log("  🚫 Прямо (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor2_straight')) {
+    //         options.push({ text: "Прямо", nextNode: "f2_s_b1" })
+    //     } else {
+    //         console.log("  🚫 Прямо (уже пройдено)")
+    //     }
         
-        if (!player.completedPaths?.includes('floor2_right')) {
-            options.push({ text: "Направо", nextNode: "checkKey2" });
-        } else {
-            console.log("  🚫 Направо (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor2_right')) {
+    //         options.push({ text: "Направо", nextNode: "checkKey2" })
+    //     } else {
+    //         console.log("  🚫 Направо (уже пройдено)")
+    //     }
         
-        if (!player.completedPaths?.includes('floor2_left')) {
-            options.push({ text: "Налево", nextNode: "f2_l_b1" });
-        } else {
-            console.log("  🚫 Налево (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor2_left')) {
+    //         options.push({ text: "Налево", nextNode: "f2_l_b1" })
+    //     } else {
+    //         console.log("  🚫 Налево (уже пройдено)")
+    //     }
         
-        if (options.length === 0) {
-            console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться дальше.");
-            return "floor_3_start";
-        }
+    //     if (options.length === 0) {
+    //         console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться дальше.")
+    //         return "floor_3_start"
+    //     }
         
-        options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`));
+    //     options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
         
-        const answer = await rl.question('\nВыберите номер: ');
-        const choiceIndex = parseInt(answer, 10) - 1;
+    //     const answer = await rl.question('\nВыберите номер: ')
+    //     const choiceIndex = parseInt(answer, 10) - 1
         
-        if (options[choiceIndex]) {
-            return options[choiceIndex].nextNode;
-        }
+    //     if (options[choiceIndex]) {
+    //         return options[choiceIndex].nextNode
+    //     }
         
-        console.log("Неверный выбор.");
-        return "dungeon_hub_2";
-    },
+    //     console.log("Неверный выбор.")
+    //     return "dungeon_hub_2"
+    // },
 
-    dungeon_hub_3: async (rl) => {
-        console.log("🔍 Пройденные пути (3 этаж):", player.completedPaths);
-        console.log("\n[ЭТАЖ 3] Вы в центральном зале. Куда пойдем?");
+    // dungeon_hub_3: async (rl) => {
+    //     console.log("🔍 Пройденные пути (3 этаж):", player.completedPaths)
+    //     console.log("\n[ЭТАЖ 3] Вы в центральном зале. Куда пойдем?")
         
-        const options = [];
+    //     const options = []
         
-        if (!player.completedPaths?.includes('floor3_straight')) {
-            options.push({ text: "Прямо", nextNode: "f3_s_b1" });
-        } else {
-            console.log("  🚫 Прямо (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor3_straight')) {
+    //         options.push({ text: "Прямо", nextNode: "f3_s_b1" })
+    //     } else {
+    //         console.log("  🚫 Прямо (уже пройдено)")
+    //     }
         
-        if (!player.completedPaths?.includes('floor3_right')) {
-            options.push({ text: "Направо", nextNode: "checkKey3" });
-        } else {
-            console.log("  🚫 Направо (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor3_right')) {
+    //         options.push({ text: "Направо", nextNode: "checkKey3" })
+    //     } else {
+    //         console.log("  🚫 Направо (уже пройдено)")
+    //     }
         
-        if (!player.completedPaths?.includes('floor3_left')) {
-            options.push({ text: "Налево", nextNode: "f3_l_b1" });
-        } else {
-            console.log("  🚫 Налево (уже пройдено)");
-        }
+    //     if (!player.completedPaths?.includes('floor3_left')) {
+    //         options.push({ text: "Налево", nextNode: "f3_l_b1" })
+    //     } else {
+    //         console.log("  🚫 Налево (уже пройдено)")
+    //     }
         
-        if (options.length === 0) {
-            console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться к финальному боссу.");
-            return "talkWithGuardian";
-        }
+    //     if (options.length === 0) {
+    //         console.log("\n✨ Все пути на этом этаже пройдены! Пора двигаться к финальному боссу.")
+    //         return "talkWithGuardian"
+    //     }
         
-        options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`));
+    //     options.forEach((opt, idx) => console.log(`${idx + 1}. ${opt.text}`))
         
-        const answer = await rl.question('\nВыберите номер: ');
-        const choiceIndex = parseInt(answer, 10) - 1;
+    //     const answer = await rl.question('\nВыберите номер: ')
+    //     const choiceIndex = parseInt(answer, 10) - 1
         
-        if (options[choiceIndex]) {
-            return options[choiceIndex].nextNode;
-        }
+    //     if (options[choiceIndex]) {
+    //         return options[choiceIndex].nextNode
+    //     }
         
-        console.log("Неверный выбор.");
-        return "dungeon_hub_3";
-    },
+    //     console.log("Неверный выбор.")
+    //     return "dungeon_hub_3"
+    // },
 }

@@ -56,7 +56,27 @@
       "npc": "[ЭТАЖ 3] Вы достигли дна. Здесь всё пропитано магией.",
       "options": [{ "text": "Идти к финалу", "nextNode": "dungeon_hub_3" }]
     },
+
+    "dungeon_hub_1": {
+      "npc": "[ЭТАЖ 1] Вы в центральном зале. Куда пойдем?",
+      "options": [{ "text": "Прямо", "nextNode": "f1_s_b1", "condition": "!completedPaths.includes('floor1_straight')" },
+          { "text": "Направо", "nextNode": "checkKey1", "condition": "!completedPaths.includes('floor1_right')" },
+          { "text": "Налево", "nextNode": "f1_l_b1", "condition": "!completedPaths.includes('floor1_left')" }]
+    },
     
+    "dungeon_hub_2": {
+    "npc": "[ЭТАЖ 2] Вы в центральном зале. Куда пойдем?",
+    "options": [{ "text": "Прямо", "nextNode": "f2_s_b1", "condition": "!completedPaths.includes('floor2_straight')" },
+        { "text": "Направо", "nextNode": "checkKey2", "condition": "!completedPaths.includes('floor2_right')" },
+        { "text": "Налево", "nextNode": "f2_l_b1", "condition": "!completedPaths.includes('floor2_left')" }]
+    },
+
+    "dungeon_hub_3": {
+    "npc": "[ЭТАЖ 3] Вы в центральном зале. Куда пойдем?",
+    "options": [{ "text": "Прямо", "nextNode": "f3_s_b1", "condition": "!completedPaths.includes('floor3_straight')" },
+        { "text": "Направо", "nextNode": "checkKey3", "condition": "!completedPaths.includes('floor3_right')" },
+        { "text": "Налево", "nextNode": "f3_l_b1", "condition": "!completedPaths.includes('floor3_left')" }]
+    },
 
     "f3_s_b1": { "npc": "Вас атакует Низший Демон!", "options": [{ "text": "В бой!", "nextNode": "fight_demon_l" }] },
     "f3_s_b2": { "npc": "Путь преграждает Рыцарь Бездны!", "options": [{ "text": "В бой!", "nextNode": "fight_abyss_k" }] },
